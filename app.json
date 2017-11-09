@@ -1,5 +1,13 @@
 {
   "expo": {
+    "name": "Fish Hoek Weather",
+    "slug": "fish-hoek-weather",
+    "icon": "./imgs/ic_launcher-web.png",
+    "version": "0.0.1",
+    "orientation": "portrait",
+    "loading": {
+      "icon": "./imgs/ic_launcher-web.png"
+    },
     "sdkVersion": "22.0.0"
   }
 }
