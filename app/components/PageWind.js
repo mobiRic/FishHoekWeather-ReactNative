@@ -53,7 +53,8 @@ export default class PageWind extends Component {
 const styles = StyleSheet.create({
   pageContainer: {
     alignItems: 'center',
-    marginTop: 48,
+    paddingTop: 38,
+    paddingBottom: 16,
   },
   widget: {
     width: 200,
