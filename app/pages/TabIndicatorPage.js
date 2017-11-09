@@ -8,9 +8,10 @@
 import React, {Component} from 'react'
 import {Animated, StyleSheet, View} from 'react-native'
 import {IndicatorViewPager, PagerTabIndicator} from 'rn-viewpager'
-import {CirclePagerView, TrianglePagerView} from '../components/PagerItemView'
+import {TrianglePagerView} from '../components/PagerItemView'
 import PageWind from "../components/PageWind";
 import PageBarometer from "../components/PageBarometer";
+import PageTemperature from "../components/PageTemperature";
 
 export default class TabIndicatorPage extends Component {
   state = {
@@ -38,7 +39,9 @@ export default class TabIndicatorPage extends Component {
           <View>
             <PageWind/>
           </View>
-          {CirclePagerView()}
+          <View>
+            <PageTemperature/>
+          </View>
           <View>
             <PageBarometer/>
           </View>
