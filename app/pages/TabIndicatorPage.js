@@ -2,12 +2,14 @@
  * Created by tangzhibin on 16/3/24.
  */
 
+
 'use strict';
 
 import React, {Component} from 'react'
-import {Animated, StyleSheet} from 'react-native'
+import {Animated, StyleSheet, View} from 'react-native'
 import {IndicatorViewPager, PagerTabIndicator} from 'rn-viewpager'
 import {CirclePagerView, SquarePagerView, TrianglePagerView} from '../components/PagerItemView'
+import PageWind from "../components/PageWind";
 
 export default class TabIndicatorPage extends Component {
   state = {
@@ -32,7 +34,9 @@ export default class TabIndicatorPage extends Component {
           scrollEnabled={true}
           initialPage={0}
         >
-          {SquarePagerView()}
+          <View>
+            <PageWind/>
+          </View>
           {CirclePagerView()}
           {SquarePagerView()}
           {TrianglePagerView()}
