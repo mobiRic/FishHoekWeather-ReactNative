@@ -3,19 +3,27 @@ import {Image, ScrollView, StyleSheet, Text} from "react-native";
 
 export default class PageWind extends Component {
 
-  render() {
-    let windSpeed = 12;
-    let windDir = 135;
+  windSpeed: Number;
+  windDir: Number;
 
+  constructor() {
+    super();
+
+    this.windSpeed = 18.3;
+    this.windDir = 283;
+  }
+
+
+  render() {
     return (
       <ScrollView contentContainerStyle={styles.pageContainer}>
-        <Text>{`Wind is ${windSpeed} knots from ${windDir}° (SSE)`}</Text>
+        <Text>{`Wind is ${this.windSpeed} knots from ${this.windDir}° (SSE)`}</Text>
         <Image
           style={styles.widget}
           source={require('../../imgs/widgets/windrose.png')}>
           <Image
             style={styles.widget}
-            transform={[{rotate: `${windDir}deg`}]}
+            transform={[{rotate: `${this.windDir}deg`}]}
             source={require('../../imgs/widgets/arrow_wind_direction.png')}
           />
         </Image>
