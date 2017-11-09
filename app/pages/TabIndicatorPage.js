@@ -12,6 +12,7 @@ import {TrianglePagerView} from '../components/PagerItemView'
 import PageWind from "../components/PageWind";
 import PageBarometer from "../components/PageBarometer";
 import PageTemperature from "../components/PageTemperature";
+import PageRain from "../components/PageRain";
 
 export default class TabIndicatorPage extends Component {
   state = {
@@ -45,7 +46,9 @@ export default class TabIndicatorPage extends Component {
           <View>
             <PageBarometer/>
           </View>
-          {TrianglePagerView()}
+          <View>
+            <PageRain/>
+          </View>
         </IndicatorViewPager>
       </Animated.View>
     )
