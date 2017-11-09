@@ -51,23 +51,23 @@ export default class TabIndicatorPage extends Component {
     let tabs = [
       {
         text: 'Wind',
-        iconSource: require('../../imgs/ic_tab_square.png'),
-        selectedIconSource: require('../../imgs/ic_tab_square_slct.png')
+        iconSource: require('../../imgs/ic_tab_wind.png'),
+        selectedIconSource: require('../../imgs/ic_tab_wind.png')
       },
       {
         text: 'Temp',
-        iconSource: require('../../imgs/ic_tab_circle.png'),
-        selectedIconSource: require('../../imgs/ic_tab_circle_slct.png')
+        iconSource: require('../../imgs/ic_tab_temp.png'),
+        selectedIconSource: require('../../imgs/ic_tab_temp.png')
       },
       {
         text: 'Baro',
-        iconSource: require('../../imgs/ic_tab_square.png'),
-        selectedIconSource: require('../../imgs/ic_tab_square_slct.png')
+        iconSource: require('../../imgs/ic_tab_baro.png'),
+        selectedIconSource: require('../../imgs/ic_tab_baro.png')
       },
       {
         text: 'Rain',
-        iconSource: require('../../imgs/ic_tab_triangle.png'),
-        selectedIconSource: require('../../imgs/ic_tab_triangle_slct.png')
+        iconSource: require('../../imgs/ic_tab_rain.png'),
+        selectedIconSource: require('../../imgs/ic_tab_rain.png')
       }
     ];
     return (
@@ -90,19 +90,19 @@ const styles = StyleSheet.create({
   indicatorContainer: {
     backgroundColor: 0xFFFFFFFF,
     borderTopWidth: 0,
-    height: 56,
+    height: 64,
     paddingTop: 0,
     paddingBottom: 0
   },
   tabIcon: {
-    width: 20,
-    height: 20,
+    width: 24,
+    height: 32,
     tintColor: '#7F8C8D',
     resizeMode: 'contain'
   },
   selectedTabIcon: {
-    width: 20,
-    height: 20,
+    width: 32,
+    height: 32,
     tintColor: '#2C3E50',
     resizeMode: 'contain'
   },
