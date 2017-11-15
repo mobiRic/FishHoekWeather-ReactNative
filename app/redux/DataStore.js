@@ -16,6 +16,7 @@ const TAG_WEATHER_START = '<!-- FHBSC-JSON ';
 const TAG_WEATHER_END = '} -->';
 
 export const INITIAL_STATE = {
+  selectedPage: 0,
   lastUpdated: null,
   weather: {
     "Time": "07-Nov-2017 12:35",
@@ -37,6 +38,7 @@ export const INITIAL_STATE = {
 
 const WEATHER_UPDATED = 'WEATHER_UPDATED';
 const ERROR = 'ERROR';
+const PAGE_SELECTED = 'PAGE_SELECTED';
 
 export const reducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -55,6 +57,12 @@ export const reducer = (state = INITIAL_STATE, action) => {
     }
     case ERROR: {
       return state;
+    }
+    case PAGE_SELECTED: {
+      return {
+        ...state,
+        selectedPage: action.data,
+      };
     }
   }
 
@@ -90,4 +98,17 @@ export const fetchWeather = () => async (dispatch, getState) => {
       error
     })
   }
+};
+
+export const onPageSelected = (selectedPage) => (dispatch, getState) => {
+  console.log(`onPageSelected -> ${selectedPage}`);
+
+  if (selectedPage === getState().selectedPage) {
+    return;
+  }
+
+  dispatch({
+    type: PAGE_SELECTED,
+    data: selectedPage
+  });
 };
