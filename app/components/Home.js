@@ -9,9 +9,6 @@ import PageTemperature from "./PageTemperature";
 import PageRain from "./PageRain";
 
 export default class Home extends Component {
-  state = {
-    bgColor: new Animated.Value(0)
-  };
 
   _setBgColor = Animated.event([{bgColor: this.state.bgColor}]);
 
@@ -19,6 +16,14 @@ export default class Home extends Component {
     inputRange: [0, 1, 2, 3],
     outputRange: ['hsl(187, 74%, 47%)', 'hsl(89, 47%, 54%)', 'hsl(12, 97%, 59%)', 'hsl(120, 60%, 47%)']
   });
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      bgColor: new Animated.Value(0),
+    };
+  }
 
   render() {
     return (
