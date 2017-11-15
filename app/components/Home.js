@@ -7,6 +7,22 @@ import PageWind from "./PageWind";
 import PageBarometer from "./PageBarometer";
 import PageTemperature from "./PageTemperature";
 import PageRain from "./PageRain";
+import {connect} from "react-redux";
+import {onPageSelected} from "../redux/DataStore";
+import {bindActionCreators} from "redux";
+
+@connect(
+  state => ({
+    selectedPage: state.selectedPage,
+  }),
+  dispatch => ({
+    actions: {
+      ...bindActionCreators(
+        {onPageSelected},
+        dispatch)
+    }
+  }),
+)
 
 export default class Home extends Component {
 
@@ -33,6 +49,7 @@ export default class Home extends Component {
           style={{flex: 1}}
           indicator={this._renderTabIndicator()}
           onPageScroll={this._onPageScroll.bind(this)}
+          onPageSelected={this._onPageSelected.bind(this)}
           scrollEnabled={true}
           initialPage={0}
         >
@@ -58,6 +75,11 @@ export default class Home extends Component {
     let {offset, position} = scrollData;
     if (position < 0 || position >= 3) return;
     this._setBgColor({bgColor: offset + position});
+  }
+
+  _onPageSelected(nativeEvent) {
+    let selectedPage = nativeEvent.position;
+    this.props.actions.onPageSelected(selectedPage);
   }
 
   _renderTabIndicator() {
