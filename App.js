@@ -1,6 +1,6 @@
 import React from 'react';
 import {StatusBar, StyleSheet, View} from 'react-native';
-import TabIndicatorPage from "./app/pages/TabIndicatorPage";
+import Home from "./app/components/Home";
 
 export default class App extends React.Component {
   render() {
@@ -13,7 +13,7 @@ export default class App extends React.Component {
           barStyle="light-content"
           hidden={false}
         />
-        <TabIndicatorPage/>
+        <Home/>
       </View>
     );
   }

@@ -1,20 +1,14 @@
-/**
- * Created by tangzhibin on 16/3/24.
- */
-
-
 'use strict';
 
 import React, {Component} from 'react'
 import {Animated, StyleSheet, View} from 'react-native'
 import {IndicatorViewPager, PagerTabIndicator} from 'rn-viewpager'
-import {TrianglePagerView} from '../components/PagerItemView'
-import PageWind from "../components/PageWind";
-import PageBarometer from "../components/PageBarometer";
-import PageTemperature from "../components/PageTemperature";
-import PageRain from "../components/PageRain";
+import PageWind from "./PageWind";
+import PageBarometer from "./PageBarometer";
+import PageTemperature from "./PageTemperature";
+import PageRain from "./PageRain";
 
-export default class TabIndicatorPage extends Component {
+export default class Home extends Component {
   state = {
     bgColor: new Animated.Value(0)
   };
@@ -38,6 +32,7 @@ export default class TabIndicatorPage extends Component {
           initialPage={0}
         >
           <View>
+            {/*ViewPagerAndroid requires each page to be surrounded by a <View></View> tag*/}
             <PageWind/>
           </View>
           <View>
