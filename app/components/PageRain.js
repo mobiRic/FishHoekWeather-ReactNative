@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
+import {connect} from "react-redux";
 
 /**
  * Assumed maximum rain rate the meter will show.
@@ -8,8 +9,15 @@ const MAX_RAIN_RANGE = 15;
 /**
  * Assumed minimum rain rate the meter will show.
  */
-const MIN_RAIN_RANGE = 0;
 const NO_RAIN = parseFloat(0.0);
+const MIN_RAIN_RANGE = NO_RAIN;
+const TAG_RAIN_MILLIS = " mm/hr";
+
+@connect(
+  state => ({
+    weather: state.weather,
+  }),
+)
 
 export default class PageRain extends Component {
 
@@ -20,13 +28,35 @@ export default class PageRain extends Component {
   constructor() {
     super();
 
-    this.rainMillis = 5.6;
-    this.offset = this.calcOffsetForRain(this.rainMillis);
+    this.rainMillis = MIN_RAIN_RANGE;
+    this.offset = this._calcOffsetForRain(this.rainMillis);
     if (parseFloat(this.rainMillis) === NO_RAIN) {
       this.rainTitle = "No rain";
     } else {
       this.rainTitle = `Raining at ${this.rainMillis} mm/hr`;
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.weather) {
+      this._onWeatherUpdated(nextProps.weather);
+    }
+  }
+
+  _onWeatherUpdated(weather) {
+    if (weather.rainRateNow) {
+      this._setRain(weather.rainRateNow);
+    }
+  }
+
+  _setRain(rainRate) {
+    this.rainMillis = this._parseRainStr(rainRate);
+    this.offset = this._calcOffsetForRain(this.rainMillis);
+  }
+
+  _parseRainStr(outTempStr) {
+    const n = outTempStr.indexOf(TAG_RAIN_MILLIS);
+    return outTempStr.substring(0, n);
   }
 
   /**
@@ -35,7 +65,7 @@ export default class PageRain extends Component {
    * @param millis rain rate mm/hr
    * @return offset for the view
    */
-  calcOffsetForRain(millis) {
+  _calcOffsetForRain(millis) {
     let heightBlue =
       (millis - MIN_RAIN_RANGE) * 200
       / (MAX_RAIN_RANGE - MIN_RAIN_RANGE);
