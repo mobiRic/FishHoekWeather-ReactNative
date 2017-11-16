@@ -26,19 +26,17 @@ import {bindActionCreators} from "redux";
 
 export default class Home extends Component {
 
-  _setBgColor = Animated.event([{bgColor: this.state.bgColor}]);
-
-  _bgColor = this.state.bgColor.interpolate({
-    inputRange: [0, 1, 2, 3],
-    outputRange: ['hsl(187, 74%, 47%)', 'hsl(89, 47%, 54%)', 'hsl(12, 97%, 59%)', 'hsl(120, 60%, 47%)']
-  });
-
   constructor(props) {
     super(props);
 
     this.state = {
       bgColor: new Animated.Value(0),
     };
+    this._setBgColor = Animated.event([{bgColor: this.state.bgColor}]);
+    this._bgColor = this.state.bgColor.interpolate({
+      inputRange: [0, 1, 2, 3],
+      outputRange: ['hsl(187, 74%, 47%)', 'hsl(89, 47%, 54%)', 'hsl(12, 97%, 59%)', 'hsl(120, 60%, 47%)']
+    });
   }
 
   render() {
