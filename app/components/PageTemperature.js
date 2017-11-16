@@ -1,6 +1,7 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import {connect} from "react-redux";
+import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
 
 /**
  * Assumed maximum temperature the thermometer will show.
@@ -18,7 +19,7 @@ const TAG_TEMP_DEGREES = "&#176;C";
   }),
 )
 
-export default class PageTemperature extends Component {
+export default class PageTemperature extends AStyledWeatherPage {
 
   temperature: Number;
   offset: Number;
@@ -28,12 +29,6 @@ export default class PageTemperature extends Component {
 
     this.temperature = MIN_TEMP_RANGE;
     this.offset = this._calcOffsetForDegrees(this.temperature);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.weather) {
-      this._onWeatherUpdated(nextProps.weather);
-    }
   }
 
   _onWeatherUpdated(weather) {
@@ -98,11 +93,7 @@ export default class PageTemperature extends Component {
 
 
 const styles = StyleSheet.create({
-  pageContainer: {
-    alignItems: 'center',
-    paddingTop: 38,
-    paddingBottom: 16,
-  },
+  ...SharedWeatherPageStyles,
   widgetBackground: {
     width: 200,
     height: 200,
@@ -111,15 +102,6 @@ const styles = StyleSheet.create({
   tintableBackground: {
     width: 200,
     height: 200,
-    resizeMode: 'contain',
-  },
-  widget: {
-    width: 200,
-    height: 200,
-    resizeMode: 'contain',
-  },
-  graph: {
-    flex: 1,
     resizeMode: 'contain',
   },
 });

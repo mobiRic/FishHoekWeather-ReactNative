@@ -1,6 +1,7 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import {connect} from "react-redux";
+import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
 
 /**
  * Assumed maximum rain rate the meter will show.
@@ -19,7 +20,7 @@ const TAG_RAIN_MILLIS = " mm/hr";
   }),
 )
 
-export default class PageRain extends Component {
+export default class PageRain extends AStyledWeatherPage {
 
   rainMillis: Number;
   offset: Number;
@@ -34,12 +35,6 @@ export default class PageRain extends Component {
       this.rainTitle = "No rain";
     } else {
       this.rainTitle = `Raining at ${this.rainMillis} mm/hr`;
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.weather) {
-      this._onWeatherUpdated(nextProps.weather);
     }
   }
 
@@ -105,11 +100,7 @@ export default class PageRain extends Component {
 
 
 const styles = StyleSheet.create({
-  pageContainer: {
-    alignItems: 'center',
-    paddingTop: 38,
-    paddingBottom: 16,
-  },
+  ...SharedWeatherPageStyles,
   widgetBackground: {
     width: 200,
     height: 200,
@@ -118,15 +109,6 @@ const styles = StyleSheet.create({
   tintableBackground: {
     width: 200,
     height: 200,
-    resizeMode: 'contain',
-  },
-  widget: {
-    width: 200,
-    height: 200,
-    resizeMode: 'contain',
-  },
-  graph: {
-    flex: 1,
     resizeMode: 'contain',
   },
 });

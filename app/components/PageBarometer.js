@@ -1,6 +1,7 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Image, ScrollView, StyleSheet, Text} from "react-native";
 import {connect} from "react-redux";
+import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
 
 /**
  * Assumed maximum pressure the barometer will show.
@@ -18,7 +19,7 @@ const TAG_BAROMETER_PRESSURE = " mbar";
   }),
 )
 
-export default class PageBarometer extends Component {
+export default class PageBarometer extends AStyledWeatherPage {
 
   pressure: Number;
   degrees: Number;
@@ -28,12 +29,6 @@ export default class PageBarometer extends Component {
 
     this.pressure = MIN_PRESSURE_MBARS;
     this.degrees = this._calcDegreesForPressure(this.pressure);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.weather) {
-      this._onWeatherUpdated(nextProps.weather);
-    }
   }
 
   _onWeatherUpdated(weather) {
@@ -93,18 +88,5 @@ export default class PageBarometer extends Component {
 
 
 const styles = StyleSheet.create({
-  pageContainer: {
-    alignItems: 'center',
-    paddingTop: 38,
-    paddingBottom: 16,
-  },
-  widget: {
-    width: 200,
-    height: 200,
-    resizeMode: 'contain',
-  },
-  graph: {
-    flex: 1,
-    resizeMode: 'contain',
-  },
+  ...SharedWeatherPageStyles,
 });

@@ -1,5 +1,6 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Image, ScrollView, StyleSheet, Text} from "react-native";
+import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
 import {connect} from "react-redux";
 
 const TAG_WIND_KNOTS = " knots";
@@ -13,7 +14,7 @@ const COMPASS_DIRECTIONS =
   }),
 )
 
-export default class PageWind extends Component {
+export default class PageWind extends AStyledWeatherPage {
 
   windSpeed: Number;
   windDir: Number;
@@ -25,12 +26,6 @@ export default class PageWind extends Component {
     this.windSpeed = 0;
     this.windDir = 0;
     this.windCompass = COMPASS_DIRECTIONS[0];
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.weather) {
-      this._onWeatherUpdated(nextProps.weather);
-    }
   }
 
   _onWeatherUpdated(weather) {
@@ -97,18 +92,5 @@ export default class PageWind extends Component {
 
 
 const styles = StyleSheet.create({
-  pageContainer: {
-    alignItems: 'center',
-    paddingTop: 38,
-    paddingBottom: 16,
-  },
-  widget: {
-    width: 200,
-    height: 200,
-    resizeMode: 'contain',
-  },
-  graph: {
-    flex: 1,
-    resizeMode: 'contain',
-  },
+  ...SharedWeatherPageStyles,
 });
