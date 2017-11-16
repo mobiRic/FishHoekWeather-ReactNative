@@ -8,7 +8,7 @@ import PageBarometer from "./PageBarometer";
 import PageTemperature from "./PageTemperature";
 import PageRain from "./PageRain";
 import {connect} from "react-redux";
-import {onPageSelected} from "../redux/DataStore";
+import {fetchWeather, onPageSelected} from "../redux/DataStore";
 import {bindActionCreators} from "redux";
 
 @connect(
@@ -18,7 +18,7 @@ import {bindActionCreators} from "redux";
   dispatch => ({
     actions: {
       ...bindActionCreators(
-        {onPageSelected},
+        {onPageSelected, fetchWeather},
         dispatch)
     }
   }),
@@ -37,6 +37,10 @@ export default class Home extends Component {
       inputRange: [0, 1, 2, 3],
       outputRange: ['hsl(187, 74%, 47%)', 'hsl(89, 47%, 54%)', 'hsl(12, 97%, 59%)', 'hsl(120, 60%, 47%)']
     });
+  }
+
+  componentWillMount() {
+    this.props.actions.fetchWeather();
   }
 
   componentWillReceiveProps(nextProps) {

@@ -1,5 +1,5 @@
 const BASE_URL = "http://www.fhbsc.co.za/weather/";
-const HOME_PAGE = BASE_URL + "smartphone/index.html";
+const WEATHER_API = BASE_URL + "smartphone/weather.json";
 const DAY_WIND = BASE_URL + "daywind.png";
 const DAY_WIND_DIR = BASE_URL + "daywinddir.png";
 const WEEK_WIND = BASE_URL + "weekwind.png";
@@ -10,10 +10,6 @@ const DAY_BAROMETER = BASE_URL + "daybarometer.png";
 const WEEK_BAROMETER = BASE_URL + "weekbarometer.png";
 const DAY_RAIN = BASE_URL + "dayrain.png";
 const MONTH_RAIN = BASE_URL + "monthrain.png";
-
-
-const TAG_WEATHER_START = '<!-- FHBSC-JSON ';
-const TAG_WEATHER_END = '} -->';
 
 export const INITIAL_STATE = {
   selectedPage: 0,
@@ -73,25 +69,15 @@ export const fetchWeather = () => async (dispatch, getState) => {
   try {
     // check for updated weather
     // noinspection ES6ModulesDependencies
-    const response = await fetch(`${HOME_PAGE}`);
-
-    // extract the JSON
-    const n = response._bodyText.indexOf(TAG_WEATHER_START) + TAG_WEATHER_START.length;
-    const m = response._bodyText.indexOf(TAG_WEATHER_END, n) + 1;
-    const json = response._bodyText.substring(n, m);
+    const response = await fetch(`${WEATHER_API}`);
 
     dispatch({
       type: WEATHER_UPDATED,
-      data: JSON.parse(json),
+      data: JSON.parse(response._bodyText),
     });
-
-    // load new images if the weather has been updated
-    // if (getState().next.length < PREFETCH_IMAGES) {
-    //   dispatch(fetchImage());
-    // }
   }
   catch (error) {
-    console.log(`Error fetching weather ${error}`);
+    console.warn(`Error fetching weather ${error}`);
 
     dispatch({
       type: ERROR,
