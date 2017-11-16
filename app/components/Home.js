@@ -39,17 +39,26 @@ export default class Home extends Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.selectedPage) {
+      this._setPage(nextProps.selectedPage);
+    }
+  }
+
   render() {
     return (
       <Animated.View style={{alignSelf: 'stretch', flex: 1, backgroundColor: this._bgColor}}>
 
         <IndicatorViewPager
           style={{flex: 1}}
+          ref={(component) => {
+            this._viewPager = component
+          }}
           indicator={this._renderTabIndicator()}
           onPageScroll={this._onPageScroll.bind(this)}
           onPageSelected={this._onPageSelected.bind(this)}
           scrollEnabled={true}
-          initialPage={0}
+          initialPage={this.props.selectedPage}
         >
           <View>
             {/*ViewPagerAndroid requires each page to be surrounded by a <View></View> tag*/}
@@ -78,6 +87,12 @@ export default class Home extends Component {
   _onPageSelected(nativeEvent) {
     let selectedPage = nativeEvent.position;
     this.props.actions.onPageSelected(selectedPage);
+  }
+
+  _setPage(newPage) {
+    if (newPage !== this._viewPager._currentIndex) {
+      this._viewPager.setPage(newPage);
+    }
   }
 
   _renderTabIndicator() {
