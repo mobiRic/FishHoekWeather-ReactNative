@@ -1,5 +1,7 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
+import {connect} from "react-redux";
+import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
 
 /**
  * Assumed maximum temperature the thermometer will show.
@@ -9,8 +11,15 @@ const MAX_TEMP_RANGE = 40;
  * Assumed minimum temperature the thermometer will show.
  */
 const MIN_TEMP_RANGE = -15;
+const TAG_TEMP_DEGREES = "&#176;C";
 
-export default class PageTemperature extends Component {
+@connect(
+  state => ({
+    weather: state.weather,
+  }),
+)
+
+export default class PageTemperature extends AStyledWeatherPage {
 
   temperature: Number;
   offset: Number;
@@ -18,8 +27,24 @@ export default class PageTemperature extends Component {
   constructor() {
     super();
 
-    this.temperature = 18.6;
-    this.offset = this.calcOffsetForDegrees(this.temperature);
+    this.temperature = MIN_TEMP_RANGE;
+    this.offset = this._calcOffsetForDegrees(this.temperature);
+  }
+
+  _onWeatherUpdated(weather) {
+    if (weather.outTemp) {
+      this._setTemp(weather.outTemp);
+    }
+  }
+
+  _setTemp(outTempStr) {
+    this.temperature = this._parseTempStr(outTempStr);
+    this.offset = this._calcOffsetForDegrees(this.temperature);
+  }
+
+  _parseTempStr(outTempStr) {
+    const n = outTempStr.indexOf(TAG_TEMP_DEGREES);
+    return outTempStr.substring(0, n);
   }
 
   /**
@@ -28,7 +53,7 @@ export default class PageTemperature extends Component {
    * @param degrees temperature
    * @return offset for the view
    */
-  calcOffsetForDegrees(degrees) {
+  _calcOffsetForDegrees(degrees) {
     let heightRed =
       (degrees - MIN_TEMP_RANGE) * 200
       / (MAX_TEMP_RANGE - MIN_TEMP_RANGE);
@@ -68,11 +93,7 @@ export default class PageTemperature extends Component {
 
 
 const styles = StyleSheet.create({
-  pageContainer: {
-    alignItems: 'center',
-    paddingTop: 38,
-    paddingBottom: 16,
-  },
+  ...SharedWeatherPageStyles,
   widgetBackground: {
     width: 200,
     height: 200,
@@ -81,15 +102,6 @@ const styles = StyleSheet.create({
   tintableBackground: {
     width: 200,
     height: 200,
-    resizeMode: 'contain',
-  },
-  widget: {
-    width: 200,
-    height: 200,
-    resizeMode: 'contain',
-  },
-  graph: {
-    flex: 1,
     resizeMode: 'contain',
   },
 });

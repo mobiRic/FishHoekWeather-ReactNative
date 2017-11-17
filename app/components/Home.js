@@ -7,18 +7,47 @@ import PageWind from "./PageWind";
 import PageBarometer from "./PageBarometer";
 import PageTemperature from "./PageTemperature";
 import PageRain from "./PageRain";
+import {connect} from "react-redux";
+import {fetchWeather, onPageSelected} from "../redux/DataStore";
+import {bindActionCreators} from "redux";
+
+@connect(
+  state => ({
+    selectedPage: state.selectedPage,
+  }),
+  dispatch => ({
+    actions: {
+      ...bindActionCreators(
+        {onPageSelected, fetchWeather},
+        dispatch)
+    }
+  }),
+)
 
 export default class Home extends Component {
-  state = {
-    bgColor: new Animated.Value(0)
-  };
 
-  _setBgColor = Animated.event([{bgColor: this.state.bgColor}]);
+  constructor(props) {
+    super(props);
 
-  _bgColor = this.state.bgColor.interpolate({
-    inputRange: [0, 1, 2, 3],
-    outputRange: ['hsl(187, 74%, 47%)', 'hsl(89, 47%, 54%)', 'hsl(12, 97%, 59%)', 'hsl(120, 60%, 47%)']
-  });
+    this.state = {
+      bgColor: new Animated.Value(0),
+    };
+    this._setBgColor = Animated.event([{bgColor: this.state.bgColor}]);
+    this._bgColor = this.state.bgColor.interpolate({
+      inputRange: [0, 1, 2, 3],
+      outputRange: ['hsl(187, 74%, 47%)', 'hsl(89, 47%, 54%)', 'hsl(12, 97%, 59%)', 'hsl(120, 60%, 47%)']
+    });
+  }
+
+  componentWillMount() {
+    this.props.actions.fetchWeather();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.selectedPage) {
+      this._setPage(nextProps.selectedPage);
+    }
+  }
 
   render() {
     return (
@@ -26,10 +55,14 @@ export default class Home extends Component {
 
         <IndicatorViewPager
           style={{flex: 1}}
+          ref={(component) => {
+            this._viewPager = component
+          }}
           indicator={this._renderTabIndicator()}
           onPageScroll={this._onPageScroll.bind(this)}
+          onPageSelected={this._onPageSelected.bind(this)}
           scrollEnabled={true}
-          initialPage={0}
+          initialPage={this.props.selectedPage}
         >
           <View>
             {/*ViewPagerAndroid requires each page to be surrounded by a <View></View> tag*/}
@@ -53,6 +86,17 @@ export default class Home extends Component {
     let {offset, position} = scrollData;
     if (position < 0 || position >= 3) return;
     this._setBgColor({bgColor: offset + position});
+  }
+
+  _onPageSelected(nativeEvent) {
+    let selectedPage = nativeEvent.position;
+    this.props.actions.onPageSelected(selectedPage);
+  }
+
+  _setPage(newPage) {
+    if (newPage !== this._viewPager._currentIndex) {
+      this._viewPager.setPage(newPage);
+    }
   }
 
   _renderTabIndicator() {
