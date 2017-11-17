@@ -2,7 +2,8 @@ import React from 'react';
 import {Image, ScrollView, StyleSheet, Text} from "react-native";
 import {connect} from "react-redux";
 import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
-import {DAY_BAROMETER, WEEK_BAROMETER} from "../redux/DataStore";
+import {DAY_BAROMETER, fetchWeather, WEEK_BAROMETER} from "../redux/DataStore";
+import bindActionCreators from "redux/es/bindActionCreators";
 
 /**
  * Assumed maximum pressure the barometer will show.
@@ -19,6 +20,14 @@ const TAG_BAROMETER_PRESSURE = " mbar";
     weather: state.weather,
     lastUpdated: state.lastUpdated,
     cacheBuster: state.cacheBuster,
+    refreshing: state.refreshing,
+  }),
+  dispatch => ({
+    actions: {
+      ...bindActionCreators(
+        {fetchWeather},
+        dispatch)
+    }
   }),
 )
 
@@ -64,7 +73,10 @@ export default class PageBarometer extends AStyledWeatherPage {
 
   render() {
     return (
-      <ScrollView contentContainerStyle={styles.pageContainer}>
+      <ScrollView
+        contentContainerStyle={styles.pageContainer}
+        refreshControl={this._getRefreshControl()}
+      >
         <Text>{`Pressure is ${this.pressure} mbar`}</Text>
         <Image
           style={styles.widget}

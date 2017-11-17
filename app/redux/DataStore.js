@@ -42,18 +42,23 @@ export const INITIAL_STATE = {
     "rainMaxRate": "0.0 mm/hr"
   },
   cacheBuster: null,
+  refreshing: false,
 };
 
 const WEATHER_UPDATED = 'WEATHER_UPDATED';
 const ERROR = 'ERROR';
 const PAGE_SELECTED = 'PAGE_SELECTED';
+const REFRESH_STARTED = 'REFRESH_STARTED';
 
 export const reducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case WEATHER_UPDATED: {
       // ignore blank weather
       if (!action.data) {
-        return state;
+        return {
+          ...state,
+          refreshing: false,
+        };
       }
       // otherwise update the weather
       return {
@@ -61,10 +66,14 @@ export const reducer = (state = INITIAL_STATE, action) => {
         lastUpdated: new Date().getTime(),
         weather: action.data,
         cacheBuster: action.data.Time,
+        refreshing: false,
       };
     }
     case ERROR: {
-      return state;
+      return {
+        ...state,
+        refreshing: false,
+      };
     }
     case PAGE_SELECTED: {
       return {
@@ -72,12 +81,20 @@ export const reducer = (state = INITIAL_STATE, action) => {
         selectedPage: action.data,
       };
     }
+    case REFRESH_STARTED: {
+      return {
+        ...state,
+        refreshing: true,
+      }
+    }
   }
 
   return state;
 };
 
 export const fetchWeather = () => async (dispatch, getState) => {
+  dispatch({type: REFRESH_STARTED});
+
   try {
     // check for updated weather
     // noinspection ES6ModulesDependencies
@@ -94,7 +111,7 @@ export const fetchWeather = () => async (dispatch, getState) => {
     dispatch({
       type: ERROR,
       error
-    })
+    });
   }
 };
 

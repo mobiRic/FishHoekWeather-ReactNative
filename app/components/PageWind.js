@@ -1,8 +1,9 @@
 import React from 'react';
-import {Image, ScrollView, StyleSheet, Text} from "react-native";
+import {Image, RefreshControl, ScrollView, StyleSheet, Text} from "react-native";
 import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
 import {connect} from "react-redux";
-import {DAY_WIND, DAY_WIND_DIR, WEEK_WIND, WEEK_WIND_DIR} from "../redux/DataStore";
+import {DAY_WIND, DAY_WIND_DIR, fetchWeather, WEEK_WIND, WEEK_WIND_DIR} from "../redux/DataStore";
+import {bindActionCreators} from "redux";
 
 const TAG_WIND_KNOTS = " knots";
 const TAG_WIND_DEGREES = "&#176;";
@@ -14,6 +15,14 @@ const COMPASS_DIRECTIONS =
     weather: state.weather,
     lastUpdated: state.lastUpdated,
     cacheBuster: state.cacheBuster,
+    refreshing: state.refreshing,
+  }),
+  dispatch => ({
+    actions: {
+      ...bindActionCreators(
+        {fetchWeather},
+        dispatch)
+    }
   }),
 )
 
@@ -60,7 +69,10 @@ export default class PageWind extends AStyledWeatherPage {
 
   render() {
     return (
-      <ScrollView contentContainerStyle={styles.pageContainer}>
+      <ScrollView
+        contentContainerStyle={styles.pageContainer}
+        refreshControl={this._getRefreshControl()}
+      >
         <Text>{`Wind is ${this.windSpeed} knots from ${this.windDir}° (${this.windCompass})`}</Text>
         <Image
           style={styles.widget}

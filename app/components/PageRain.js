@@ -2,7 +2,8 @@ import React from 'react';
 import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import {connect} from "react-redux";
 import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
-import {DAY_RAIN, MONTH_RAIN} from "../redux/DataStore";
+import {DAY_RAIN, fetchWeather, MONTH_RAIN} from "../redux/DataStore";
+import bindActionCreators from "redux/es/bindActionCreators";
 
 /**
  * Assumed maximum rain rate the meter will show.
@@ -20,6 +21,14 @@ const TAG_RAIN_MILLIS = " mm/hr";
     weather: state.weather,
     lastUpdated: state.lastUpdated,
     cacheBuster: state.cacheBuster,
+    refreshing: state.refreshing,
+  }),
+  dispatch => ({
+    actions: {
+      ...bindActionCreators(
+        {fetchWeather},
+        dispatch)
+    }
   }),
 )
 
@@ -73,7 +82,10 @@ export default class PageRain extends AStyledWeatherPage {
 
   render() {
     return (
-      <ScrollView contentContainerStyle={styles.pageContainer}>
+      <ScrollView
+        contentContainerStyle={styles.pageContainer}
+        refreshControl={this._getRefreshControl()}
+      >
         <Text>{this.rainTitle}</Text>
         <View style={styles.widgetBackground}>
           <Image

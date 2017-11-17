@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image} from 'react-native';
+import {Image, RefreshControl} from 'react-native';
 import {
   DAY_BAROMETER, DAY_RAIN,
   DAY_TEMP_DEW,
@@ -41,6 +41,19 @@ export default class AStyledWeatherPage extends Component {
     if (nextProps.weather) {
       this._onWeatherUpdated(nextProps.weather);
     }
+  }
+
+  _getRefreshControl() {
+    return (
+      <RefreshControl
+        refreshing={this.props.refreshing}
+        onRefresh={this._onRefresh.bind(this)}
+      />
+    );
+  }
+
+  _onRefresh() {
+    this.props.actions.fetchWeather();
   }
 
   /**
