@@ -2,6 +2,7 @@ import React from 'react';
 import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import {connect} from "react-redux";
 import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
+import {DAY_RAIN, MONTH_RAIN} from "../redux/DataStore";
 
 /**
  * Assumed maximum rain rate the meter will show.
@@ -87,11 +88,11 @@ export default class PageRain extends AStyledWeatherPage {
         <Text>24 hour rain</Text>
         <Image
           style={styles.graph}
-          source={require('../../imgs/graphs/dayrain.png')}/>
+          source={this.getImage(DAY_RAIN)}/>
         <Text>30 day rain</Text>
         <Image
           style={styles.graph}
-          source={require('../../imgs/graphs/monthrain.png')}/>
+          source={this.getImage(MONTH_RAIN)}/>
       </ScrollView>
     );
   }

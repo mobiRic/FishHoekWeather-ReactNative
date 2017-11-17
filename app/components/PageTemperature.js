@@ -2,6 +2,7 @@ import React from 'react';
 import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import {connect} from "react-redux";
 import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
+import {DAY_TEMP_DEW, WEEK_TEMP_DEW} from "../redux/DataStore";
 
 /**
  * Assumed maximum temperature the thermometer will show.
@@ -80,11 +81,11 @@ export default class PageTemperature extends AStyledWeatherPage {
         <Text>24 hour temperature</Text>
         <Image
           style={styles.graph}
-          source={require('../../imgs/graphs/daytempdew.png')}/>
+          source={this.getImage(DAY_TEMP_DEW)}/>
         <Text>7 day temperature</Text>
         <Image
           style={styles.graph}
-          source={require('../../imgs/graphs/weektempdew.png')}/>
+          source={this.getImage(WEEK_TEMP_DEW)}/>
       </ScrollView>
     );
   }

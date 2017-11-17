@@ -2,6 +2,7 @@ import React from 'react';
 import {Image, ScrollView, StyleSheet, Text} from "react-native";
 import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
 import {connect} from "react-redux";
+import {DAY_WIND, DAY_WIND_DIR, WEEK_WIND, WEEK_WIND_DIR} from "../redux/DataStore";
 
 const TAG_WIND_KNOTS = " knots";
 const TAG_WIND_DEGREES = "&#176;";
@@ -71,19 +72,19 @@ export default class PageWind extends AStyledWeatherPage {
         <Text>24 hour wind speed</Text>
         <Image
           style={styles.graph}
-          source={require('../../imgs/graphs/daywind.png')}/>
+          source={this.getImage(DAY_WIND)}/>
         <Text>24 hour wind direction</Text>
         <Image
           style={styles.graph}
-          source={require('../../imgs/graphs/daywinddir.png')}/>
+          source={this.getImage(DAY_WIND_DIR)}/>
         <Text>7 day wind speed</Text>
         <Image
           style={styles.graph}
-          source={require('../../imgs/graphs/weekwind.png')}/>
+          source={this.getImage(WEEK_WIND)}/>
         <Text>7 day wind direction</Text>
         <Image
           style={styles.graph}
-          source={require('../../imgs/graphs/weekwinddir.png')}/>
+          source={this.getImage(WEEK_WIND_DIR)}/>
       </ScrollView>
     );
   }

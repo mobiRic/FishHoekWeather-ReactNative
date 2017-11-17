@@ -2,6 +2,7 @@ import React from 'react';
 import {Image, ScrollView, StyleSheet, Text} from "react-native";
 import {connect} from "react-redux";
 import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
+import {DAY_BAROMETER, WEEK_BAROMETER} from "../redux/DataStore";
 
 /**
  * Assumed maximum pressure the barometer will show.
@@ -75,11 +76,11 @@ export default class PageBarometer extends AStyledWeatherPage {
         <Text>24 hour barometer</Text>
         <Image
           style={styles.graph}
-          source={require('../../imgs/graphs/daybarometer.png')}/>
+          source={this.getImage(DAY_BAROMETER)}/>
         <Text>7 day barometer</Text>
         <Image
           style={styles.graph}
-          source={require('../../imgs/graphs/weekbarometer.png')}/>
+          source={this.getImage(WEEK_BAROMETER)}/>
       </ScrollView>
     );
   }
