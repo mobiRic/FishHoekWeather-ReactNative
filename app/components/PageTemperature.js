@@ -2,6 +2,8 @@ import React from 'react';
 import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import {connect} from "react-redux";
 import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
+import {DAY_TEMP_DEW, fetchWeather, WEEK_TEMP_DEW} from "../redux/DataStore";
+import bindActionCreators from "redux/es/bindActionCreators";
 
 /**
  * Assumed maximum temperature the thermometer will show.
@@ -16,6 +18,16 @@ const TAG_TEMP_DEGREES = "&#176;C";
 @connect(
   state => ({
     weather: state.weather,
+    lastUpdated: state.lastUpdated,
+    cacheBuster: state.cacheBuster,
+    refreshing: state.refreshing,
+  }),
+  dispatch => ({
+    actions: {
+      ...bindActionCreators(
+        {fetchWeather},
+        dispatch)
+    }
   }),
 )
 
@@ -63,7 +75,10 @@ export default class PageTemperature extends AStyledWeatherPage {
 
   render() {
     return (
-      <ScrollView contentContainerStyle={styles.pageContainer}>
+      <ScrollView
+        contentContainerStyle={styles.pageContainer}
+        refreshControl={this._getRefreshControl()}
+      >
         <Text>{`Temperature is ${this.temperature}°C`}</Text>
         <View style={styles.widgetBackground}>
           <Image
@@ -80,11 +95,11 @@ export default class PageTemperature extends AStyledWeatherPage {
         <Text>24 hour temperature</Text>
         <Image
           style={styles.graph}
-          source={require('../../imgs/graphs/daytempdew.png')}/>
+          source={this.getImage(DAY_TEMP_DEW)}/>
         <Text>7 day temperature</Text>
         <Image
           style={styles.graph}
-          source={require('../../imgs/graphs/weektempdew.png')}/>
+          source={this.getImage(WEEK_TEMP_DEW)}/>
       </ScrollView>
     );
   }

@@ -1,15 +1,27 @@
 const BASE_URL = "http://www.fhbsc.co.za/weather/";
 const WEATHER_API = BASE_URL + "smartphone/weather.json";
-const DAY_WIND = BASE_URL + "daywind.png";
-const DAY_WIND_DIR = BASE_URL + "daywinddir.png";
-const WEEK_WIND = BASE_URL + "weekwind.png";
-const WEEK_WIND_DIR = BASE_URL + "weekwinddir.png";
-const DAY_TEMP_DEW = BASE_URL + "daytempdew.png";
-const WEEK_TEMP_DEW = BASE_URL + "weektempdew.png";
-const DAY_BAROMETER = BASE_URL + "daybarometer.png";
-const WEEK_BAROMETER = BASE_URL + "weekbarometer.png";
-const DAY_RAIN = BASE_URL + "dayrain.png";
-const MONTH_RAIN = BASE_URL + "monthrain.png";
+export const DAY_WIND = "daywind.png";
+export const DAY_WIND_DIR = "daywinddir.png";
+export const WEEK_WIND = "weekwind.png";
+export const WEEK_WIND_DIR = "weekwinddir.png";
+export const DAY_TEMP_DEW = "daytempdew.png";
+export const WEEK_TEMP_DEW = "weektempdew.png";
+export const DAY_BAROMETER = "daybarometer.png";
+export const WEEK_BAROMETER = "weekbarometer.png";
+export const DAY_RAIN = "dayrain.png";
+export const MONTH_RAIN = "monthrain.png";
+
+export const REMOTE_IMAGES = BASE_URL;
+export const LOCAL_DAY_WIND = require("../../imgs/graphs/daywind.png");
+export const LOCAL_DAY_WIND_DIR = require("../../imgs/graphs/daywinddir.png");
+export const LOCAL_WEEK_WIND = require("../../imgs/graphs/weekwind.png");
+export const LOCAL_WEEK_WIND_DIR = require("../../imgs/graphs/weekwinddir.png");
+export const LOCAL_DAY_TEMP_DEW = require("../../imgs/graphs/daytempdew.png");
+export const LOCAL_WEEK_TEMP_DEW = require("../../imgs/graphs/weektempdew.png");
+export const LOCAL_DAY_BAROMETER = require("../../imgs/graphs/daybarometer.png");
+export const LOCAL_WEEK_BAROMETER = require("../../imgs/graphs/weekbarometer.png");
+export const LOCAL_DAY_RAIN = require("../../imgs/graphs/dayrain.png");
+export const LOCAL_MONTH_RAIN = require("../../imgs/graphs/monthrain.png");
 
 export const INITIAL_STATE = {
   selectedPage: 0,
@@ -30,18 +42,23 @@ export const INITIAL_STATE = {
     "rainMaxRate": "0.0 mm/hr"
   },
   cacheBuster: null,
+  refreshing: false,
 };
 
 const WEATHER_UPDATED = 'WEATHER_UPDATED';
 const ERROR = 'ERROR';
 const PAGE_SELECTED = 'PAGE_SELECTED';
+const REFRESH_STARTED = 'REFRESH_STARTED';
 
 export const reducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case WEATHER_UPDATED: {
       // ignore blank weather
       if (!action.data) {
-        return state;
+        return {
+          ...state,
+          refreshing: false,
+        };
       }
       // otherwise update the weather
       return {
@@ -49,10 +66,14 @@ export const reducer = (state = INITIAL_STATE, action) => {
         lastUpdated: new Date().getTime(),
         weather: action.data,
         cacheBuster: action.data.Time,
+        refreshing: false,
       };
     }
     case ERROR: {
-      return state;
+      return {
+        ...state,
+        refreshing: false,
+      };
     }
     case PAGE_SELECTED: {
       return {
@@ -60,12 +81,20 @@ export const reducer = (state = INITIAL_STATE, action) => {
         selectedPage: action.data,
       };
     }
+    case REFRESH_STARTED: {
+      return {
+        ...state,
+        refreshing: true,
+      }
+    }
   }
 
   return state;
 };
 
 export const fetchWeather = () => async (dispatch, getState) => {
+  dispatch({type: REFRESH_STARTED});
+
   try {
     // check for updated weather
     // noinspection ES6ModulesDependencies
@@ -82,7 +111,7 @@ export const fetchWeather = () => async (dispatch, getState) => {
     dispatch({
       type: ERROR,
       error
-    })
+    });
   }
 };
 

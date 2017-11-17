@@ -1,7 +1,9 @@
 import React from 'react';
-import {Image, ScrollView, StyleSheet, Text} from "react-native";
+import {Image, RefreshControl, ScrollView, StyleSheet, Text} from "react-native";
 import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
 import {connect} from "react-redux";
+import {DAY_WIND, DAY_WIND_DIR, fetchWeather, WEEK_WIND, WEEK_WIND_DIR} from "../redux/DataStore";
+import {bindActionCreators} from "redux";
 
 const TAG_WIND_KNOTS = " knots";
 const TAG_WIND_DEGREES = "&#176;";
@@ -11,6 +13,16 @@ const COMPASS_DIRECTIONS =
 @connect(
   state => ({
     weather: state.weather,
+    lastUpdated: state.lastUpdated,
+    cacheBuster: state.cacheBuster,
+    refreshing: state.refreshing,
+  }),
+  dispatch => ({
+    actions: {
+      ...bindActionCreators(
+        {fetchWeather},
+        dispatch)
+    }
   }),
 )
 
@@ -57,7 +69,10 @@ export default class PageWind extends AStyledWeatherPage {
 
   render() {
     return (
-      <ScrollView contentContainerStyle={styles.pageContainer}>
+      <ScrollView
+        contentContainerStyle={styles.pageContainer}
+        refreshControl={this._getRefreshControl()}
+      >
         <Text>{`Wind is ${this.windSpeed} knots from ${this.windDir}° (${this.windCompass})`}</Text>
         <Image
           style={styles.widget}
@@ -71,19 +86,19 @@ export default class PageWind extends AStyledWeatherPage {
         <Text>24 hour wind speed</Text>
         <Image
           style={styles.graph}
-          source={require('../../imgs/graphs/daywind.png')}/>
+          source={this.getImage(DAY_WIND)}/>
         <Text>24 hour wind direction</Text>
         <Image
           style={styles.graph}
-          source={require('../../imgs/graphs/daywinddir.png')}/>
+          source={this.getImage(DAY_WIND_DIR)}/>
         <Text>7 day wind speed</Text>
         <Image
           style={styles.graph}
-          source={require('../../imgs/graphs/weekwind.png')}/>
+          source={this.getImage(WEEK_WIND)}/>
         <Text>7 day wind direction</Text>
         <Image
           style={styles.graph}
-          source={require('../../imgs/graphs/weekwinddir.png')}/>
+          source={this.getImage(WEEK_WIND_DIR)}/>
       </ScrollView>
     );
   }
