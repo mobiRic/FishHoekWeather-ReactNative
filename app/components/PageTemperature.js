@@ -17,6 +17,8 @@ const TAG_TEMP_DEGREES = "&#176;C";
 @connect(
   state => ({
     weather: state.weather,
+    lastUpdated: state.lastUpdated,
+    cacheBuster: state.cacheBuster,
   }),
 )
 

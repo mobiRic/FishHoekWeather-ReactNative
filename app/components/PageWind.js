@@ -12,6 +12,8 @@ const COMPASS_DIRECTIONS =
 @connect(
   state => ({
     weather: state.weather,
+    lastUpdated: state.lastUpdated,
+    cacheBuster: state.cacheBuster,
   }),
 )
 

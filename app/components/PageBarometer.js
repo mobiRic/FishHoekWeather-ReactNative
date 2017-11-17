@@ -17,6 +17,8 @@ const TAG_BAROMETER_PRESSURE = " mbar";
 @connect(
   state => ({
     weather: state.weather,
+    lastUpdated: state.lastUpdated,
+    cacheBuster: state.cacheBuster,
   }),
 )
 

@@ -18,6 +18,8 @@ const TAG_RAIN_MILLIS = " mm/hr";
 @connect(
   state => ({
     weather: state.weather,
+    lastUpdated: state.lastUpdated,
+    cacheBuster: state.cacheBuster,
   }),
 )
 

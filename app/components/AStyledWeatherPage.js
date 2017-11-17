@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Image} from 'react-native';
 import {
   DAY_BAROMETER, DAY_RAIN,
   DAY_TEMP_DEW,
@@ -7,7 +8,7 @@ import {
   LOCAL_WEEK_BAROMETER,
   LOCAL_WEEK_TEMP_DEW,
   LOCAL_WEEK_WIND,
-  LOCAL_WEEK_WIND_DIR, MONTH_RAIN, WEEK_BAROMETER, WEEK_TEMP_DEW,
+  LOCAL_WEEK_WIND_DIR, MONTH_RAIN, REMOTE_IMAGES, WEEK_BAROMETER, WEEK_TEMP_DEW,
   WEEK_WIND, WEEK_WIND_DIR
 } from "../redux/DataStore";
 
@@ -48,7 +49,11 @@ export default class AStyledWeatherPage extends Component {
    * @param imageName Base name of the image
    */
   getImage(imageName) {
-    return this._getLocalImage(imageName);
+    if (!this.props.lastUpdated) {
+      return this._getLocalImage(imageName);
+    } else {
+      return this._getRemoteImage(imageName, this.props.cacheBuster);
+    }
   }
 
   _getLocalImage(imageName) {
@@ -86,7 +91,13 @@ export default class AStyledWeatherPage extends Component {
     }
   }
 
-  _getRemoteImage(imageName) {
+  _getRemoteImage(imageName, cacheBuster) {
+    const uri = REMOTE_IMAGES + imageName + '?cacheBuster=' + cacheBuster;
+    console.log(uri);
+    return {
+      uri: uri,
+      cache: 'force-cache',
+    };
   }
 
 };
@@ -103,7 +114,9 @@ export const SharedWeatherPageStyles = {
     resizeMode: 'contain',
   },
   graph: {
-    flex: 1,
+    width: 300,
+    height: 180,
+    // flex: 1,
     resizeMode: 'contain',
   },
 };
