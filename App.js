@@ -25,8 +25,6 @@ persistStore(store, {storage: AsyncStorage});
 
 export default class App extends React.Component {
   render() {
-    console.log("render");
-
     return (
       <Provider store={store}>
         <View style={styles.container}>
