@@ -41,30 +41,35 @@ export default class PageWind extends AStyledWeatherPage {
     this.windCompass = COMPASS_DIRECTIONS[0];
 
     // animation
-    this.initAnimation();
-
+    this.previousAnimationEndDegrees = 0;
+    this._initAnimation();
   }
 
-  initAnimation() {
-    if (this.spinValue) {
-      this.spinValue.stopAnimation((value) => console.log("Final Value: " + value));
+  _initAnimation() {
+    if (this.animatedValue) {
+      this.animatedValue.stopAnimation((value) => {
+        this.previousAnimationEndDegrees = value;
+      });
     }
-    this.spinValue = new Animated.Value(0);
-    this.interpolatedRotateAnimation = this.spinValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: [`${0}deg`, `${this.windDir}deg`]
+    this.animatedValue = new Animated.Value(this.previousAnimationEndDegrees);
+    this.interpolator = this.animatedValue.interpolate({
+      inputRange: [0, 360],
+      outputRange: ['0deg', '360deg']
     });
   }
 
-  startAnimation() {
-    this.initAnimation();
+
+  _animateTo(toDegrees) {
+    this._initAnimation();
     Animated.timing(
-      this.spinValue,
+      this.animatedValue,
       {
-        toValue: 1,
+        toValue: toDegrees,
         duration: 1000,
       }
-    ).start(() => console.log("done"));
+    ).start(() => {
+      this.previousAnimationEndDegrees = toDegrees;
+    });
   }
 
   _onWeatherUpdated(weather) {
@@ -80,7 +85,7 @@ export default class PageWind extends AStyledWeatherPage {
     const fakeWindDir = parseFloat(realWindDir + ((Math.random() * 90) - 45));
     console.log(`Mapping wind ${realWindDir} --> ${fakeWindDir}`);
     this.windDir = fakeWindDir;
-    this.startAnimation();
+    this._animateTo(this.windDir);
 
     this.windCompass = this._getCompass(this.windDir);
   }
@@ -113,7 +118,7 @@ export default class PageWind extends AStyledWeatherPage {
           <Animated.Image
             style={[
               styles.widget,
-              {transform: [{rotate: this.interpolatedRotateAnimation}]}
+              {transform: [{rotate: this.interpolator}]}
             ]}
             source={require('../../imgs/widgets/arrow_wind_direction.png')}
           />
@@ -137,7 +142,6 @@ export default class PageWind extends AStyledWeatherPage {
       </ScrollView>
     );
   }
-
 };
 
 
