@@ -48,7 +48,12 @@ export default class PageWind extends AStyledWeatherPage {
 
   _setWind(windSpeedStr, windDirStr) {
     this.windSpeed = this._parseSpeedStr(windSpeedStr);
-    this.windDir = this._parseDirStr(windDirStr);
+
+    const realWindDir = parseFloat(this._parseDirStr(windDirStr));
+    const fakeWindDir = parseFloat(realWindDir + ((Math.random() * 90) - 45));
+    console.log(`Mapping wind ${realWindDir} --> ${fakeWindDir}`);
+    this.windDir = fakeWindDir;
+
     this.windCompass = this._getCompass(this.windDir);
   }
 

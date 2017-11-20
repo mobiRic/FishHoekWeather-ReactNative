@@ -50,7 +50,11 @@ export default class PageTemperature extends AStyledWeatherPage {
   }
 
   _setTemp(outTempStr) {
-    this.temperature = this._parseTempStr(outTempStr);
+    const realTemp = parseFloat(this._parseTempStr(outTempStr));
+    const fakeTemp = parseFloat(realTemp + ((Math.random() * 10) - 5));
+    console.log(`Mapping temp ${realTemp} --> ${fakeTemp}`);
+    this.temperature = fakeTemp;
+
     this.offset = this._calcOffsetForDegrees(this.temperature);
   }
 
