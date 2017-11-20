@@ -31,6 +31,8 @@ import {
  */
 export default class AStyledWeatherPage extends Component {
 
+  ANIMATION_DURATION = 300;
+
   constructor() {
     super();
 

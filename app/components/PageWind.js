@@ -46,11 +46,14 @@ export default class PageWind extends AStyledWeatherPage {
   }
 
   _initAnimation() {
+    // first stop any currently running animations
     if (this.animatedValue) {
       this.animatedValue.stopAnimation((value) => {
         this.previousAnimationEndDegrees = value;
       });
     }
+
+    // create a new animation
     this.animatedValue = new Animated.Value(this.previousAnimationEndDegrees);
     this.interpolator = this.animatedValue.interpolate({
       inputRange: [0, 360],
@@ -60,12 +63,16 @@ export default class PageWind extends AStyledWeatherPage {
 
 
   _animateTo(toDegrees) {
+    if (this.previousAnimationEndDegrees === toDegrees) {
+      return;
+    }
+
     this._initAnimation();
     Animated.timing(
       this.animatedValue,
       {
         toValue: toDegrees,
-        duration: 1000,
+        duration: this.ANIMATION_DURATION,
         useNativeDriver: false,
       }
     ).start(() => {
@@ -81,14 +88,10 @@ export default class PageWind extends AStyledWeatherPage {
 
   _setWind(windSpeedStr, windDirStr) {
     this.windSpeed = this._parseSpeedStr(windSpeedStr);
-
-    const realWindDir = parseFloat(this._parseDirStr(windDirStr));
-    const fakeWindDir = parseFloat(realWindDir + ((Math.random() * 90) - 45));
-    console.log(`Mapping wind ${realWindDir} --> ${fakeWindDir}`);
-    this.windDir = fakeWindDir;
-    this._animateTo(this.windDir);
-
+    this.windDir = this._parseDirStr(windDirStr);
     this.windCompass = this._getCompass(this.windDir);
+
+    this._animateTo(parseFloat(this.windDir));
   }
 
   _parseSpeedStr(windSpeedStr) {
