@@ -66,6 +66,7 @@ export default class PageWind extends AStyledWeatherPage {
       {
         toValue: toDegrees,
         duration: 1000,
+        useNativeDriver: false,
       }
     ).start(() => {
       this.previousAnimationEndDegrees = toDegrees;
