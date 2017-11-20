@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, RefreshControl, ScrollView, StyleSheet, Text} from "react-native";
+import {Animated, Image, ImageBackground, ScrollView, StyleSheet, Text} from "react-native";
 import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
 import {connect} from "react-redux";
 import {DAY_WIND, DAY_WIND_DIR, fetchWeather, WEEK_WIND, WEEK_WIND_DIR} from "../redux/DataStore";
@@ -35,9 +35,36 @@ export default class PageWind extends AStyledWeatherPage {
   constructor() {
     super();
 
+    // weather
     this.windSpeed = 0;
     this.windDir = 0;
     this.windCompass = COMPASS_DIRECTIONS[0];
+
+    // animation
+    this.initAnimation();
+
+  }
+
+  initAnimation() {
+    if (this.spinValue) {
+      this.spinValue.stopAnimation((value) => console.log("Final Value: " + value));
+    }
+    this.spinValue = new Animated.Value(0);
+    this.interpolatedRotateAnimation = this.spinValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [`${0}deg`, `${this.windDir}deg`]
+    });
+  }
+
+  startAnimation() {
+    this.initAnimation();
+    Animated.timing(
+      this.spinValue,
+      {
+        toValue: 1,
+        duration: 1000,
+      }
+    ).start(() => console.log("done"));
   }
 
   _onWeatherUpdated(weather) {
@@ -53,6 +80,7 @@ export default class PageWind extends AStyledWeatherPage {
     const fakeWindDir = parseFloat(realWindDir + ((Math.random() * 90) - 45));
     console.log(`Mapping wind ${realWindDir} --> ${fakeWindDir}`);
     this.windDir = fakeWindDir;
+    this.startAnimation();
 
     this.windCompass = this._getCompass(this.windDir);
   }
@@ -79,15 +107,17 @@ export default class PageWind extends AStyledWeatherPage {
         refreshControl={this._getRefreshControl()}
       >
         <Text>{`Wind is ${this.windSpeed} knots from ${this.windDir}° (${this.windCompass})`}</Text>
-        <Image
+        <ImageBackground
           style={styles.widget}
           source={require('../../imgs/widgets/windrose.png')}>
-          <Image
-            style={styles.widget}
-            transform={[{rotate: `${this.windDir}deg`}]}
+          <Animated.Image
+            style={[
+              styles.widget,
+              {transform: [{rotate: this.interpolatedRotateAnimation}]}
+            ]}
             source={require('../../imgs/widgets/arrow_wind_direction.png')}
           />
-        </Image>
+        </ImageBackground>
         <Text>24 hour wind speed</Text>
         <Image
           style={styles.graph}

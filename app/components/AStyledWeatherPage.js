@@ -135,7 +135,7 @@ export const SharedWeatherPageStyles = {
   widget: {
     width: 200,
     height: 200,
-    resizeMode: 'contain',
+    // resizeMode: 'contain',
   },
   graph: {
     width: 300,
