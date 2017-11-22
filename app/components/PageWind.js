@@ -41,7 +41,7 @@ export default class PageWind extends AStyledWeatherPage {
     this.windCompass = COMPASS_DIRECTIONS[0];
 
     // animation
-    this.previousAnimationEndDegrees = 0;
+    this.previousAnimationEndValue = 0;
     this._initAnimation();
   }
 
@@ -49,12 +49,12 @@ export default class PageWind extends AStyledWeatherPage {
     // first stop any currently running animations
     if (this.animatedValue) {
       this.animatedValue.stopAnimation((value) => {
-        this.previousAnimationEndDegrees = value;
+        this.previousAnimationEndValue = value;
       });
     }
 
     // create a new animation
-    this.animatedValue = new Animated.Value(this.previousAnimationEndDegrees);
+    this.animatedValue = new Animated.Value(this.previousAnimationEndValue);
     this.interpolator = this.animatedValue.interpolate({
       inputRange: [0, 360],
       outputRange: ['0deg', '360deg']
@@ -63,7 +63,7 @@ export default class PageWind extends AStyledWeatherPage {
 
 
   _animateTo(toDegrees) {
-    if (this.previousAnimationEndDegrees === toDegrees) {
+    if (this.previousAnimationEndValue === toDegrees) {
       return;
     }
 
@@ -76,7 +76,7 @@ export default class PageWind extends AStyledWeatherPage {
         useNativeDriver: false,
       }
     ).start(() => {
-      this.previousAnimationEndDegrees = toDegrees;
+      this.previousAnimationEndValue = toDegrees;
     });
   }
 

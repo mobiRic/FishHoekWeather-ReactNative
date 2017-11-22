@@ -137,12 +137,10 @@ export const SharedWeatherPageStyles = {
   widget: {
     width: 200,
     height: 200,
-    // resizeMode: 'contain',
   },
   graph: {
     width: 300,
     height: 180,
-    // flex: 1,
     resizeMode: 'contain',
   },
 };

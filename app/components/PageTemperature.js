@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
+import {Animated, Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import {connect} from "react-redux";
 import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
 import {DAY_TEMP_DEW, fetchWeather, WEEK_TEMP_DEW} from "../redux/DataStore";
@@ -34,13 +34,47 @@ const TAG_TEMP_DEGREES = "&#176;C";
 export default class PageTemperature extends AStyledWeatherPage {
 
   temperature: Number;
-  offset: Number;
 
   constructor() {
     super();
 
-    this.temperature = MIN_TEMP_RANGE;
-    this.offset = this._calcOffsetForDegrees(this.temperature);
+    // weather
+    this.temperature = 0;
+
+    // animation
+    this.previousAnimationEndValue = 0;
+    this._initAnimation();
+  }
+
+  _initAnimation() {
+    if (this.animatedValue) {
+      this.animatedValue.stopAnimation((value) => {
+        this.previousAnimationEndValue = value;
+      });
+    }
+    this.animatedValue = new Animated.Value(this.previousAnimationEndValue);
+    this.interpolator = this.animatedValue.interpolate({
+      inputRange: [MIN_TEMP_RANGE, MAX_TEMP_RANGE],
+      outputRange: [200, 0]
+    });
+  }
+
+  _animateTo(toDegrees) {
+    if (this.previousAnimationEndValue === toDegrees) {
+      return;
+    }
+
+    this._initAnimation();
+    Animated.timing(
+      this.animatedValue,
+      {
+        toValue: toDegrees,
+        duration: this.ANIMATION_DURATION,
+        useNativeDriver: false,
+      }
+    ).start(() => {
+      this.previousAnimationEndValue = toDegrees;
+    });
   }
 
   _onWeatherUpdated(weather) {
@@ -50,31 +84,13 @@ export default class PageTemperature extends AStyledWeatherPage {
   }
 
   _setTemp(outTempStr) {
-    const realTemp = parseFloat(this._parseTempStr(outTempStr));
-    const fakeTemp = parseFloat(realTemp + ((Math.random() * 10) - 5));
-    console.log(`Mapping temp ${realTemp} --> ${fakeTemp}`);
-    this.temperature = fakeTemp;
-
-    this.offset = this._calcOffsetForDegrees(this.temperature);
+    this.temperature = this._parseTempStr(outTempStr);
+    this._animateTo(parseFloat(this.temperature));
   }
 
   _parseTempStr(outTempStr) {
     const n = outTempStr.indexOf(TAG_TEMP_DEGREES);
     return outTempStr.substring(0, n);
-  }
-
-  /**
-   * Calculates the offset of the red thermometer background view, based on a given temperature.
-   *
-   * @param degrees temperature
-   * @return offset for the view
-   */
-  _calcOffsetForDegrees(degrees) {
-    let heightRed =
-      (degrees - MIN_TEMP_RANGE) * 200
-      / (MAX_TEMP_RANGE - MIN_TEMP_RANGE);
-    let topOffset = 200 - heightRed;
-    return topOffset;
   }
 
   render() {
@@ -85,16 +101,25 @@ export default class PageTemperature extends AStyledWeatherPage {
       >
         <Text>{`Temperature is ${this.temperature}°C`}</Text>
         <View style={styles.widgetBackground}>
+          <Animated.View
+            style={[
+              styles.redBackground,
+              {
+                position: 'absolute',
+                top: this.interpolator,
+                bottom: 0,
+              }
+            ]}
+          />
           <Image
-            style={styles.tintableBackground}
-            tintColor={'#fb0000'}
-            transform={[{translateY: this.offset}]}
-            source={require('../../imgs/widgets/tintable_background.png')}>
-            <Image
-              style={styles.widget}
-              source={require('../../imgs/widgets/thermometer.png')}
-            />
-          </Image>
+            style={[
+              styles.widget,
+              {
+                position: 'absolute',
+              }
+            ]}
+            source={require('../../imgs/widgets/thermometer.png')}
+          />
         </View>
         <Text>24 hour temperature</Text>
         <Image
@@ -118,9 +143,8 @@ const styles = StyleSheet.create({
     height: 200,
     backgroundColor: '#cccccc',
   },
-  tintableBackground: {
+  redBackground: {
     width: 200,
-    height: 200,
-    resizeMode: 'contain',
+    backgroundColor: '#fb0000',
   },
 });
