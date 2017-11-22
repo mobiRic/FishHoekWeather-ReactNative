@@ -43,12 +43,14 @@ export const INITIAL_STATE = {
   },
   cacheBuster: null,
   refreshing: false,
+  rehydrated: false,
 };
 
 const WEATHER_UPDATED = 'WEATHER_UPDATED';
 const ERROR = 'ERROR';
 const PAGE_SELECTED = 'PAGE_SELECTED';
 const REFRESH_STARTED = 'REFRESH_STARTED';
+const REHYDRATE_COMPLETE = 'persist/REHYDRATE';
 
 export const reducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -85,6 +87,12 @@ export const reducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         refreshing: true,
+      }
+    }
+    case REHYDRATE_COMPLETE: {
+      return {
+        ...state,
+        rehydrated: true,
       }
     }
   }

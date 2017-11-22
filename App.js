@@ -25,8 +25,6 @@ persistStore(store, {storage: AsyncStorage});
 
 export default class App extends React.Component {
   render() {
-    console.log("render");
-
     return (
       <Provider store={store}>
         <View style={styles.container}>
@@ -45,7 +43,6 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f',
     alignItems: 'center',
     justifyContent: 'center',
   },

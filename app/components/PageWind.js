@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, RefreshControl, ScrollView, StyleSheet, Text} from "react-native";
+import {Animated, Image, ImageBackground, ScrollView, StyleSheet, Text} from "react-native";
 import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
 import {connect} from "react-redux";
 import {DAY_WIND, DAY_WIND_DIR, fetchWeather, WEEK_WIND, WEEK_WIND_DIR} from "../redux/DataStore";
@@ -35,9 +35,49 @@ export default class PageWind extends AStyledWeatherPage {
   constructor() {
     super();
 
+    // weather
     this.windSpeed = 0;
     this.windDir = 0;
     this.windCompass = COMPASS_DIRECTIONS[0];
+
+    // animation
+    this.previousAnimationEndValue = 0;
+    this._initAnimation();
+  }
+
+  _initAnimation() {
+    // first stop any currently running animations
+    if (this.animatedValue) {
+      this.animatedValue.stopAnimation((value) => {
+        this.previousAnimationEndValue = value;
+      });
+    }
+
+    // create a new animation
+    this.animatedValue = new Animated.Value(this.previousAnimationEndValue);
+    this.interpolator = this.animatedValue.interpolate({
+      inputRange: [0, 360],
+      outputRange: ['0deg', '360deg']
+    });
+  }
+
+
+  _animateTo(toDegrees) {
+    if (this.previousAnimationEndValue === toDegrees) {
+      return;
+    }
+
+    this._initAnimation();
+    Animated.timing(
+      this.animatedValue,
+      {
+        toValue: toDegrees,
+        duration: this.ANIMATION_DURATION,
+        useNativeDriver: false,
+      }
+    ).start(() => {
+      this.previousAnimationEndValue = toDegrees;
+    });
   }
 
   _onWeatherUpdated(weather) {
@@ -50,6 +90,8 @@ export default class PageWind extends AStyledWeatherPage {
     this.windSpeed = this._parseSpeedStr(windSpeedStr);
     this.windDir = this._parseDirStr(windDirStr);
     this.windCompass = this._getCompass(this.windDir);
+
+    this._animateTo(parseFloat(this.windDir));
   }
 
   _parseSpeedStr(windSpeedStr) {
@@ -74,15 +116,17 @@ export default class PageWind extends AStyledWeatherPage {
         refreshControl={this._getRefreshControl()}
       >
         <Text>{`Wind is ${this.windSpeed} knots from ${this.windDir}° (${this.windCompass})`}</Text>
-        <Image
+        <ImageBackground
           style={styles.widget}
           source={require('../../imgs/widgets/windrose.png')}>
-          <Image
-            style={styles.widget}
-            transform={[{rotate: `${this.windDir}deg`}]}
+          <Animated.Image
+            style={[
+              styles.widget,
+              {transform: [{rotate: this.interpolator}]}
+            ]}
             source={require('../../imgs/widgets/arrow_wind_direction.png')}
           />
-        </Image>
+        </ImageBackground>
         <Text>24 hour wind speed</Text>
         <Image
           style={styles.graph}
@@ -102,7 +146,6 @@ export default class PageWind extends AStyledWeatherPage {
       </ScrollView>
     );
   }
-
 };
 
 

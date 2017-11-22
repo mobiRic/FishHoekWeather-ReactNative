@@ -1,15 +1,27 @@
 import React, {Component} from 'react';
-import {Image, RefreshControl} from 'react-native';
+import {RefreshControl} from 'react-native';
 import {
-  DAY_BAROMETER, DAY_RAIN,
+  DAY_BAROMETER,
+  DAY_RAIN,
   DAY_TEMP_DEW,
-  DAY_WIND, DAY_WIND_DIR, LOCAL_DAY_BAROMETER, LOCAL_DAY_RAIN, LOCAL_DAY_TEMP_DEW, LOCAL_DAY_WIND, LOCAL_DAY_WIND_DIR,
-  LOCAL_IMAGES, LOCAL_MONTH_RAIN,
+  DAY_WIND,
+  DAY_WIND_DIR,
+  LOCAL_DAY_BAROMETER,
+  LOCAL_DAY_RAIN,
+  LOCAL_DAY_TEMP_DEW,
+  LOCAL_DAY_WIND,
+  LOCAL_DAY_WIND_DIR,
+  LOCAL_MONTH_RAIN,
   LOCAL_WEEK_BAROMETER,
   LOCAL_WEEK_TEMP_DEW,
   LOCAL_WEEK_WIND,
-  LOCAL_WEEK_WIND_DIR, MONTH_RAIN, REMOTE_IMAGES, WEEK_BAROMETER, WEEK_TEMP_DEW,
-  WEEK_WIND, WEEK_WIND_DIR
+  LOCAL_WEEK_WIND_DIR,
+  MONTH_RAIN,
+  REMOTE_IMAGES,
+  WEEK_BAROMETER,
+  WEEK_TEMP_DEW,
+  WEEK_WIND,
+  WEEK_WIND_DIR
 } from "../redux/DataStore";
 
 /**
@@ -18,6 +30,8 @@ import {
  * Contains code and styles common to all pages.
  */
 export default class AStyledWeatherPage extends Component {
+
+  ANIMATION_DURATION = 300;
 
   constructor() {
     super();
@@ -106,7 +120,6 @@ export default class AStyledWeatherPage extends Component {
 
   _getRemoteImage(imageName, cacheBuster) {
     const uri = REMOTE_IMAGES + imageName + '?cacheBuster=' + cacheBuster;
-    console.log(uri);
     return {
       uri: uri,
       cache: 'force-cache',
@@ -118,18 +131,16 @@ export default class AStyledWeatherPage extends Component {
 export const SharedWeatherPageStyles = {
   pageContainer: {
     alignItems: 'center',
-    paddingTop: 38,
+    paddingTop: 16,
     paddingBottom: 16,
   },
   widget: {
     width: 200,
     height: 200,
-    resizeMode: 'contain',
   },
   graph: {
     width: 300,
     height: 180,
-    // flex: 1,
     resizeMode: 'contain',
   },
 };

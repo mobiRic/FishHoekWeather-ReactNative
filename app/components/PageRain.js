@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
+import {Animated, Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import {connect} from "react-redux";
 import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
 import {DAY_RAIN, fetchWeather, MONTH_RAIN} from "../redux/DataStore";
@@ -35,19 +35,53 @@ const TAG_RAIN_MILLIS = " mm/hr";
 export default class PageRain extends AStyledWeatherPage {
 
   rainMillis: Number;
-  offset: Number;
   rainTitle: String;
 
   constructor() {
     super();
 
+    // weather
     this.rainMillis = MIN_RAIN_RANGE;
-    this.offset = this._calcOffsetForRain(this.rainMillis);
     if (parseFloat(this.rainMillis) === NO_RAIN) {
       this.rainTitle = "No rain";
     } else {
       this.rainTitle = `Raining at ${this.rainMillis} mm/hr`;
     }
+
+    // animation
+    this.previousAnimationEndValue = MIN_RAIN_RANGE;
+    this._initAnimation();
+  }
+
+  _initAnimation() {
+    if (this.animatedValue) {
+      this.animatedValue.stopAnimation((value) => {
+        this.previousAnimationEndValue = value;
+      });
+    }
+    this.animatedValue = new Animated.Value(this.previousAnimationEndValue);
+    this.interpolator = this.animatedValue.interpolate({
+      inputRange: [MIN_RAIN_RANGE, MAX_RAIN_RANGE],
+      outputRange: [200, 0]
+    });
+  }
+
+  _animateTo(toMillis) {
+    if (this.previousAnimationEndValue === toMillis) {
+      return;
+    }
+
+    this._initAnimation();
+    Animated.timing(
+      this.animatedValue,
+      {
+        toValue: toMillis,
+        duration: this.ANIMATION_DURATION,
+        useNativeDriver: false,
+      }
+    ).start(() => {
+      this.previousAnimationEndValue = toMillis;
+    });
   }
 
   _onWeatherUpdated(weather) {
@@ -58,26 +92,12 @@ export default class PageRain extends AStyledWeatherPage {
 
   _setRain(rainRate) {
     this.rainMillis = this._parseRainStr(rainRate);
-    this.offset = this._calcOffsetForRain(this.rainMillis);
+    this._animateTo(parseFloat(this.rainMillis));
   }
 
   _parseRainStr(outTempStr) {
     const n = outTempStr.indexOf(TAG_RAIN_MILLIS);
     return outTempStr.substring(0, n);
-  }
-
-  /**
-   * Calculates the offset of the blue rain meter background view, based on a given rain rate.
-   *
-   * @param millis rain rate mm/hr
-   * @return offset for the view
-   */
-  _calcOffsetForRain(millis) {
-    let heightBlue =
-      (millis - MIN_RAIN_RANGE) * 200
-      / (MAX_RAIN_RANGE - MIN_RAIN_RANGE);
-    let topOffset = 200 - heightBlue;
-    return topOffset;
   }
 
   render() {
@@ -88,16 +108,25 @@ export default class PageRain extends AStyledWeatherPage {
       >
         <Text>{this.rainTitle}</Text>
         <View style={styles.widgetBackground}>
+          <Animated.View
+            style={[
+              styles.blueBackground,
+              {
+                position: 'absolute',
+                top: this.interpolator,
+                bottom: 0,
+              }
+            ]}
+          />
           <Image
-            style={styles.tintableBackground}
-            tintColor={'#1ab6d7'}
-            transform={[{translateY: this.offset}]}
-            source={require('../../imgs/widgets/tintable_background.png')}>
-            <Image
-              style={styles.widget}
-              source={require('../../imgs/widgets/raindrop.png')}
-            />
-          </Image>
+            style={[
+              styles.widget,
+              {
+                position: 'absolute',
+              }
+            ]}
+            source={require('../../imgs/widgets/raindrop.png')}
+          />
         </View>
         <Text>24 hour rain</Text>
         <Image
@@ -114,16 +143,16 @@ export default class PageRain extends AStyledWeatherPage {
 };
 
 
-const styles = StyleSheet.create({
-  ...SharedWeatherPageStyles,
-  widgetBackground: {
-    width: 200,
-    height: 200,
-    backgroundColor: '#cccccc',
-  },
-  tintableBackground: {
-    width: 200,
-    height: 200,
-    resizeMode: 'contain',
-  },
-});
+const
+  styles = StyleSheet.create({
+    ...SharedWeatherPageStyles,
+    widgetBackground: {
+      width: 200,
+      height: 200,
+      backgroundColor: '#cccccc',
+    },
+    blueBackground: {
+      width: 200,
+      backgroundColor: '#1ab6d7',
+    },
+  });

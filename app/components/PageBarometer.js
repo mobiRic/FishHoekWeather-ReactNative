@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, ScrollView, StyleSheet, Text} from "react-native";
+import {Animated, Image, ImageBackground, ScrollView, StyleSheet, Text} from "react-native";
 import {connect} from "react-redux";
 import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
 import {DAY_BAROMETER, fetchWeather, WEEK_BAROMETER} from "../redux/DataStore";
@@ -34,13 +34,47 @@ const TAG_BAROMETER_PRESSURE = " mbar";
 export default class PageBarometer extends AStyledWeatherPage {
 
   pressure: Number;
-  degrees: Number;
 
   constructor() {
     super();
 
+    // weather
     this.pressure = MIN_PRESSURE_MBARS;
-    this.degrees = this._calcDegreesForPressure(this.pressure);
+
+    // animation
+    this.previousAnimationEndValue = MIN_PRESSURE_MBARS;
+    this._initAnimation();
+  }
+
+  _initAnimation() {
+    if (this.animatedValue) {
+      this.animatedValue.stopAnimation((value) => {
+        this.previousAnimationEndValue = value;
+      });
+    }
+    this.animatedValue = new Animated.Value(this.previousAnimationEndValue);
+    this.interpolator = this.animatedValue.interpolate({
+      inputRange: [MIN_PRESSURE_MBARS, MAX_PRESSURE_MBARS],
+      outputRange: ['0deg', '360deg']
+    });
+  }
+
+  _animateTo(toDegrees) {
+    if (this.previousAnimationEndValue === toDegrees) {
+      return;
+    }
+
+    this._initAnimation();
+    Animated.timing(
+      this.animatedValue,
+      {
+        toValue: toDegrees,
+        duration: this.ANIMATION_DURATION,
+        useNativeDriver: false,
+      }
+    ).start(() => {
+      this.previousAnimationEndValue = toDegrees;
+    });
   }
 
   _onWeatherUpdated(weather) {
@@ -51,24 +85,12 @@ export default class PageBarometer extends AStyledWeatherPage {
 
   _setPressure(barometer) {
     this.pressure = this._parsePressureStr(barometer);
-    this.degrees = this._calcDegreesForPressure(this.pressure);
+    this._animateTo(parseFloat(this.pressure));
   }
 
   _parsePressureStr(barometer) {
     const n = barometer.indexOf(TAG_BAROMETER_PRESSURE);
     return barometer.substring(0, n);
-  }
-
-  /**
-   * Calculates the angle of the barometer arrow for a given pressure.
-   *
-   * @param mBars barometer pressure
-   * @return angle for the arrow
-   */
-  _calcDegreesForPressure(mBars) {
-    let degrees =
-      (mBars - MIN_PRESSURE_MBARS) * 360 / (MAX_PRESSURE_MBARS - MIN_PRESSURE_MBARS);
-    return degrees;
   }
 
   render() {
@@ -78,15 +100,17 @@ export default class PageBarometer extends AStyledWeatherPage {
         refreshControl={this._getRefreshControl()}
       >
         <Text>{`Pressure is ${this.pressure} mbar`}</Text>
-        <Image
+        <ImageBackground
           style={styles.widget}
           source={require('../../imgs/widgets/barometer.png')}>
-          <Image
-            style={styles.widget}
-            transform={[{rotate: `${this.degrees}deg`}]}
+          <Animated.Image
+            style={[
+              styles.widget,
+              {transform: [{rotate: this.interpolator}]}
+            ]}
             source={require('../../imgs/widgets/arrow_barometer.png')}
           />
-        </Image>
+        </ImageBackground>
         <Text>24 hour barometer</Text>
         <Image
           style={styles.graph}

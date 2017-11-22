@@ -2,6 +2,7 @@
 
 import React, {Component} from 'react'
 import {Animated, StyleSheet, View} from 'react-native'
+import {Constants} from 'expo';
 import {IndicatorViewPager, PagerTabIndicator} from 'rn-viewpager'
 import PageWind from "./PageWind";
 import PageBarometer from "./PageBarometer";
@@ -14,6 +15,7 @@ import {bindActionCreators} from "redux";
 @connect(
   state => ({
     selectedPage: state.selectedPage,
+    rehydrated: state.rehydrated,
   }),
   dispatch => ({
     actions: {
@@ -39,13 +41,13 @@ export default class Home extends Component {
     });
   }
 
-  componentWillMount() {
-    this.props.actions.fetchWeather();
-  }
-
   componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedPage) {
-      this._setPage(nextProps.selectedPage);
+    // delay initialisation until the props are rehydrated
+    if (!this.props.rehydrated && nextProps.rehydrated) {
+      this.props.actions.fetchWeather();
+      if (nextProps.selectedPage) {
+        this._setPage(nextProps.selectedPage);
+      }
     }
   }
 
@@ -54,7 +56,10 @@ export default class Home extends Component {
       <Animated.View style={{alignSelf: 'stretch', flex: 1, backgroundColor: this._bgColor}}>
 
         <IndicatorViewPager
-          style={{flex: 1}}
+          style={{
+            flex: 1,
+            paddingTop: Constants.statusBarHeight,
+          }}
           ref={(component) => {
             this._viewPager = component
           }}
