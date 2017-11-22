@@ -2,6 +2,7 @@
 
 import React, {Component} from 'react'
 import {Animated, StyleSheet, View} from 'react-native'
+import {Constants} from 'expo';
 import {IndicatorViewPager, PagerTabIndicator} from 'rn-viewpager'
 import PageWind from "./PageWind";
 import PageBarometer from "./PageBarometer";
@@ -55,7 +56,10 @@ export default class Home extends Component {
       <Animated.View style={{alignSelf: 'stretch', flex: 1, backgroundColor: this._bgColor}}>
 
         <IndicatorViewPager
-          style={{flex: 1}}
+          style={{
+            flex: 1,
+            paddingTop: Constants.statusBarHeight,
+          }}
           ref={(component) => {
             this._viewPager = component
           }}

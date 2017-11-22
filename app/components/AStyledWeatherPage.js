@@ -131,7 +131,7 @@ export default class AStyledWeatherPage extends Component {
 export const SharedWeatherPageStyles = {
   pageContainer: {
     alignItems: 'center',
-    paddingTop: 38,
+    paddingTop: 16,
     paddingBottom: 16,
   },
   widget: {
