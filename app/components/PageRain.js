@@ -2,7 +2,9 @@ import React from 'react';
 import {Animated, Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import {connect} from "react-redux";
 import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
-import {DAY_RAIN, fetchWeather, MONTH_RAIN} from "../redux/DataStore";
+import {fetchWeather} from "../redux/DataStore";
+import * as Images from "../Images";
+import {DAY_RAIN, MONTH_RAIN} from "../Images";
 import bindActionCreators from "redux/es/bindActionCreators";
 
 /**
@@ -125,7 +127,7 @@ export default class PageRain extends AStyledWeatherPage {
                 position: 'absolute',
               }
             ]}
-            source={require('../../imgs/widgets/raindrop.png')}
+            source={Images.RAIN_GAUGE}
           />
         </View>
         <Text>24 hour rain</Text>

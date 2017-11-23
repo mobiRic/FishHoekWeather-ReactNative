@@ -2,7 +2,9 @@ import React from 'react';
 import {Animated, Image, ImageBackground, ScrollView, StyleSheet, Text} from "react-native";
 import {connect} from "react-redux";
 import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
-import {DAY_BAROMETER, fetchWeather, WEEK_BAROMETER} from "../redux/DataStore";
+import {fetchWeather} from "../redux/DataStore";
+import {DAY_BAROMETER, WEEK_BAROMETER} from "../Images";
+import * as Images from "../Images";
 import bindActionCreators from "redux/es/bindActionCreators";
 
 /**
@@ -102,13 +104,13 @@ export default class PageBarometer extends AStyledWeatherPage {
         <Text>{`Pressure is ${this.pressure} mbar`}</Text>
         <ImageBackground
           style={styles.widget}
-          source={require('../../imgs/widgets/barometer.png')}>
+          source={Images.BAROMETER}>
           <Animated.Image
             style={[
               styles.widget,
               {transform: [{rotate: this.interpolator}]}
             ]}
-            source={require('../../imgs/widgets/arrow_barometer.png')}
+            source={Images.BAROMETER_ARROW}
           />
         </ImageBackground>
         <Text>24 hour barometer</Text>
