@@ -1,7 +1,7 @@
 'use strict';
 
 import React, {Component} from 'react'
-import {Animated, StyleSheet, View} from 'react-native'
+import {Animated, Dimensions, StyleSheet, View} from 'react-native'
 import {Constants} from 'expo';
 import {IndicatorViewPager, PagerTabIndicator} from 'rn-viewpager'
 import PageWind from "./PageWind";
@@ -33,11 +33,17 @@ export default class Home extends Component {
 
     this.state = {
       bgColor: new Animated.Value(0),
+      bgOffset: new Animated.Value(0),
     };
     this._setBgColor = Animated.event([{bgColor: this.state.bgColor}]);
+    this._setBgOffset = Animated.event([{bgOffset: this.state.bgOffset}]);
     this._bgColor = this.state.bgColor.interpolate({
       inputRange: [0, 1, 2, 3],
       outputRange: ['hsl(187, 74%, 47%)', 'hsl(89, 47%, 54%)', 'hsl(12, 97%, 59%)', 'hsl(120, 60%, 47%)']
+    });
+    this._bgOffset = this.state.bgOffset.interpolate({
+      inputRange: [0, 3],
+      outputRange: [0, -500]
     });
   }
 
@@ -52,9 +58,20 @@ export default class Home extends Component {
   }
 
   render() {
+    let {width, height} = Dimensions.get('window');
+    console.log(width, height);
     return (
       <Animated.View style={{alignSelf: 'stretch', flex: 1, backgroundColor: this._bgColor}}>
-
+        <Animated.Image
+          style={{
+            position: 'absolute',
+            height: height,
+            left: this._bgOffset,
+            flex: 1,
+            resizeMode: 'cover'
+          }}
+          source={require('../../imgs/background/false_bay.png')}
+        />
         <IndicatorViewPager
           style={{
             flex: 1,
@@ -91,6 +108,7 @@ export default class Home extends Component {
     let {offset, position} = scrollData;
     if (position < 0 || position >= 3) return;
     this._setBgColor({bgColor: offset + position});
+    this._setBgOffset({bgOffset: offset + position});
   }
 
   _onPageSelected(nativeEvent) {
