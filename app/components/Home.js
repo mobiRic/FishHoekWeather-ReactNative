@@ -32,15 +32,9 @@ export default class Home extends Component {
     super(props);
 
     this.state = {
-      bgColor: new Animated.Value(0),
       bgOffset: new Animated.Value(0),
     };
-    this._setBgColor = Animated.event([{bgColor: this.state.bgColor}]);
     this._setBgOffset = Animated.event([{bgOffset: this.state.bgOffset}]);
-    this._bgColor = this.state.bgColor.interpolate({
-      inputRange: [0, 1, 2, 3],
-      outputRange: ['hsl(187, 74%, 47%)', 'hsl(89, 47%, 54%)', 'hsl(12, 97%, 59%)', 'hsl(120, 60%, 47%)']
-    });
     this._bgOffset = this.state.bgOffset.interpolate({
       inputRange: [0, 3],
       outputRange: [0, -500]
@@ -61,7 +55,7 @@ export default class Home extends Component {
     let {width, height} = Dimensions.get('window');
     console.log(width, height);
     return (
-      <Animated.View style={{alignSelf: 'stretch', flex: 1, backgroundColor: this._bgColor}}>
+      <View style={{alignSelf: 'stretch', flex: 1, backgroundColor: 'transparent'}}>
         <Animated.Image
           style={{
             position: 'absolute',
@@ -100,14 +94,13 @@ export default class Home extends Component {
             <PageRain/>
           </View>
         </IndicatorViewPager>
-      </Animated.View>
+      </View>
     )
   }
 
   _onPageScroll(scrollData) {
     let {offset, position} = scrollData;
     if (position < 0 || position >= 3) return;
-    this._setBgColor({bgColor: offset + position});
     this._setBgOffset({bgOffset: offset + position});
   }
 
