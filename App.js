@@ -27,23 +27,8 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <View style={styles.container}>
-          <StatusBar
-            backgroundColor="red"
-            barStyle="light-content"
-            hidden={false}
-          />
-          <Home/>
-        </View>
+        <Home/>
       </Provider>
     );
   }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+};
