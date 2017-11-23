@@ -1,8 +1,5 @@
-'use strict';
-
 import React, {Component} from 'react'
 import {Animated, Dimensions, StyleSheet, View} from 'react-native'
-import {Constants} from 'expo';
 import {IndicatorViewPager, PagerTabIndicator} from 'rn-viewpager'
 import PageWind from "./PageWind";
 import PageBarometer from "./PageBarometer";
@@ -27,6 +24,11 @@ import {bindActionCreators} from "redux";
 )
 
 export default class Home extends Component {
+  // noinspection JSUnusedGlobalSymbols
+  static navigationOptions = {
+    // name at the top of the Navigation Bar
+    title: 'Fish Hoek Weather',
+  };
 
   constructor(props) {
     super(props);
@@ -53,9 +55,12 @@ export default class Home extends Component {
 
   render() {
     let {width, height} = Dimensions.get('window');
-    console.log(width, height);
     return (
-      <View style={{alignSelf: 'stretch', flex: 1, backgroundColor: 'transparent'}}>
+      <View style={{
+        alignSelf: 'stretch',
+        flex: 1,
+        backgroundColor: 'transparent',
+      }}>
         <Animated.Image
           style={{
             position: 'absolute',
@@ -67,10 +72,7 @@ export default class Home extends Component {
           source={require('../../imgs/background/false_bay.png')}
         />
         <IndicatorViewPager
-          style={{
-            flex: 1,
-            paddingTop: Constants.statusBarHeight,
-          }}
+          style={{flex: 1}}
           ref={(component) => {
             this._viewPager = component
           }}
