@@ -1,4 +1,6 @@
 // weather gauges
+import Asset from "expo/src/Asset";
+
 export const WIND_GAUGE = require('../imgs/widgets/windrose.png');
 export const WIND_ARROW = require('../imgs/widgets/arrow_wind_direction.png');
 export const THERMOMETER = require('../imgs/widgets/thermometer.png');
@@ -29,3 +31,37 @@ export const DAY_BAROMETER = "daybarometer.png";
 export const WEEK_BAROMETER = "weekbarometer.png";
 export const DAY_RAIN = "dayrain.png";
 export const MONTH_RAIN = "monthrain.png";
+
+
+function _cacheImages(images) {
+  return images.map(image => {
+    if (typeof image === 'string') {
+      return Image.prefetch(image);
+    } else {
+      return Asset.fromModule(image).downloadAsync();
+    }
+  });
+}
+
+export async function loadAssetsAsync() {
+  const imageAssets = _cacheImages([
+    WIND_GAUGE,
+    WIND_ARROW,
+    THERMOMETER,
+    BAROMETER,
+    BAROMETER_ARROW,
+    RAIN_GAUGE,
+    LOCAL_DAY_WIND,
+    LOCAL_DAY_WIND_DIR,
+    LOCAL_WEEK_WIND,
+    LOCAL_WEEK_WIND_DIR,
+    LOCAL_DAY_TEMP_DEW,
+    LOCAL_WEEK_TEMP_DEW,
+    LOCAL_DAY_BAROMETER,
+    LOCAL_WEEK_BAROMETER,
+    LOCAL_DAY_RAIN,
+    LOCAL_MONTH_RAIN,
+  ]);
+
+  await Promise.all([...imageAssets]);
+}
