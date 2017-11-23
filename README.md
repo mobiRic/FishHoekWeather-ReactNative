@@ -7,6 +7,6 @@ This is a React Native clone (currently running in Expo.io) of the existing Andr
 Shows the live weather feed from Fish Hoek Beach Sailing Club.
 
 Data is retrieved from:
-  - http://www.fhbsc.co.za/fhbsc/weather/smartphone/weather.json
+  - http://www.fhbsc.co.za/weather/smartphone/weather.json
 
 @mobiRic
