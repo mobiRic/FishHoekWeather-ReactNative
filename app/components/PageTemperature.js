@@ -44,7 +44,7 @@ export default class PageTemperature extends AStyledWeatherPage {
     this.temperature = 0;
 
     // animation
-    this.previousAnimationEndValue = 0;
+    this.previousAnimationEndValue = MIN_TEMP_RANGE;
     this._initAnimation();
   }
 
