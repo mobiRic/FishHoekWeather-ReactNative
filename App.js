@@ -7,6 +7,7 @@ import thunk from "redux-thunk";
 import {logger} from "redux-logger";
 import {Provider} from "react-redux";
 import {StackNavigator} from 'react-navigation';
+import * as Images from "./app/Images";
 import {persistCombineReducers, persistStore} from "redux-persist";
 import {PersistGate} from "redux-persist/es/integration/react";
 
@@ -55,27 +56,12 @@ const RootNavigator = StackNavigator({
   },
 );
 
-function DelayPromise(delay) {
-  //return a function that accepts a single variable
-  return function (data) {
-    //this function returns a promise.
-    return new Promise(function (resolve, reject) {
-      console.log("Promising");
-      setTimeout(function () {
-        console.log("Timeout");
-        //a promise that is resolved after "delay" milliseconds with the data provided
-        resolve(data);
-      }, delay);
-    });
-  }
-}
-
 export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
         <PersistGate
-          onBeforeLift={DelayPromise(10000)}
+          onBeforeLift={Images.loadAssetsAsync}
           persistor={persistor}
         >
           <RootNavigator/>

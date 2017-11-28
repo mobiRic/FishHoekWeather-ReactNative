@@ -1,28 +1,7 @@
 import React, {Component} from 'react';
 import {RefreshControl} from 'react-native';
-import {
-  DAY_BAROMETER,
-  DAY_RAIN,
-  DAY_TEMP_DEW,
-  DAY_WIND,
-  DAY_WIND_DIR,
-  LOCAL_DAY_BAROMETER,
-  LOCAL_DAY_RAIN,
-  LOCAL_DAY_TEMP_DEW,
-  LOCAL_DAY_WIND,
-  LOCAL_DAY_WIND_DIR,
-  LOCAL_MONTH_RAIN,
-  LOCAL_WEEK_BAROMETER,
-  LOCAL_WEEK_TEMP_DEW,
-  LOCAL_WEEK_WIND,
-  LOCAL_WEEK_WIND_DIR,
-  MONTH_RAIN,
-  REMOTE_IMAGES,
-  WEEK_BAROMETER,
-  WEEK_TEMP_DEW,
-  WEEK_WIND,
-  WEEK_WIND_DIR
-} from "../redux/DataStore";
+import * as Images from '../Images';
+import {REMOTE_IMAGES} from "../redux/DataStore";
 
 /**
  * Base class for each weather page.
@@ -95,35 +74,35 @@ export default class AStyledWeatherPage extends Component {
 
   _getLocalImage(imageName) {
     switch (imageName) {
-      case DAY_WIND: {
-        return LOCAL_DAY_WIND;
+      case Images.DAY_WIND: {
+        return Images.LOCAL_DAY_WIND;
       }
-      case DAY_WIND_DIR: {
-        return LOCAL_DAY_WIND_DIR;
+      case Images.DAY_WIND_DIR: {
+        return Images.LOCAL_DAY_WIND_DIR;
       }
-      case WEEK_WIND: {
-        return LOCAL_WEEK_WIND;
+      case Images.WEEK_WIND: {
+        return Images.LOCAL_WEEK_WIND;
       }
-      case WEEK_WIND_DIR: {
-        return LOCAL_WEEK_WIND_DIR;
+      case Images.WEEK_WIND_DIR: {
+        return Images.LOCAL_WEEK_WIND_DIR;
       }
-      case DAY_TEMP_DEW: {
-        return LOCAL_DAY_TEMP_DEW;
+      case Images.DAY_TEMP_DEW: {
+        return Images.LOCAL_DAY_TEMP_DEW;
       }
-      case WEEK_TEMP_DEW: {
-        return LOCAL_WEEK_TEMP_DEW;
+      case Images.WEEK_TEMP_DEW: {
+        return Images.LOCAL_WEEK_TEMP_DEW;
       }
-      case DAY_BAROMETER: {
-        return LOCAL_DAY_BAROMETER;
+      case Images.DAY_BAROMETER: {
+        return Images.LOCAL_DAY_BAROMETER;
       }
-      case WEEK_BAROMETER: {
-        return LOCAL_WEEK_BAROMETER;
+      case Images.WEEK_BAROMETER: {
+        return Images.LOCAL_WEEK_BAROMETER;
       }
-      case DAY_RAIN: {
-        return LOCAL_DAY_RAIN;
+      case Images.DAY_RAIN: {
+        return Images.LOCAL_DAY_RAIN;
       }
-      case MONTH_RAIN: {
-        return LOCAL_MONTH_RAIN;
+      case Images.MONTH_RAIN: {
+        return Images.LOCAL_MONTH_RAIN;
       }
     }
   }

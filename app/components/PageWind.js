@@ -2,7 +2,9 @@ import React from 'react';
 import {Animated, Image, ImageBackground, ScrollView, StyleSheet, Text} from "react-native";
 import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
 import {connect} from "react-redux";
-import {DAY_WIND, DAY_WIND_DIR, fetchWeather, WEEK_WIND, WEEK_WIND_DIR} from "../redux/DataStore";
+import {fetchWeather} from "../redux/DataStore";
+import * as Images from "../Images";
+import {DAY_WIND, DAY_WIND_DIR, WEEK_WIND, WEEK_WIND_DIR} from "../Images";
 import {bindActionCreators} from "redux";
 
 const TAG_WIND_KNOTS = " knots";
@@ -118,13 +120,13 @@ export default class PageWind extends AStyledWeatherPage {
         <Text>{`Wind is ${this.windSpeed} knots from ${this.windDir}° (${this.windCompass})`}</Text>
         <ImageBackground
           style={styles.widget}
-          source={require('../../imgs/widgets/windrose.png')}>
+          source={Images.WIND_GAUGE}>
           <Animated.Image
             style={[
               styles.widget,
               {transform: [{rotate: this.interpolator}]}
             ]}
-            source={require('../../imgs/widgets/arrow_wind_direction.png')}
+            source={Images.WIND_ARROW}
           />
         </ImageBackground>
         <Text>24 hour wind speed</Text>
