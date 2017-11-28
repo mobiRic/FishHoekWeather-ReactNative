@@ -6,7 +6,6 @@ import {reducer} from "./app/redux/DataStore";
 import thunk from "redux-thunk";
 import {logger} from "redux-logger";
 import {Provider} from "react-redux";
-import {AppLoading} from "expo";
 import * as Images from "./app/Images";
 import {persistCombineReducers, persistStore} from "redux-persist";
 import {PersistGate} from "redux-persist/es/integration/react";
@@ -58,22 +57,10 @@ export default class App extends React.Component {
   };
 
   render() {
-    if (!this.state.isReady) {
-      return (
-        <AppLoading
-          startAsync={Images.loadAssetsAsync}
-          onFinish={() => {
-            this.setState({isReady: true});
-          }}
-          onError={console.warn}
-        />
-      );
-    }
-
     return (
       <Provider store={store}>
         <PersistGate
-          onBeforeLift={DelayPromise(10000)}
+          onBeforeLift={Images.loadAssetsAsync}
           persistor={persistor}
         >
           <View style={styles.container}>
