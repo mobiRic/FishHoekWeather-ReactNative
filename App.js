@@ -1,11 +1,12 @@
 import React from 'react';
-import {AsyncStorage, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {AsyncStorage, StatusBar} from 'react-native';
 import Home from "./app/components/Home";
 import {applyMiddleware, compose, createStore} from "redux";
 import {reducer} from "./app/redux/DataStore";
 import thunk from "redux-thunk";
 import {logger} from "redux-logger";
 import {Provider} from "react-redux";
+import {StackNavigator} from 'react-navigation';
 import {persistCombineReducers, persistStore} from "redux-persist";
 import {PersistGate} from "redux-persist/es/integration/react";
 
@@ -35,6 +36,25 @@ const persistor = persistStore(
   }
 );
 
+
+/**
+ * Define the navigation roots as children of the Navigation Bar.
+ */
+const RootNavigator = StackNavigator({
+    Home: {screen: Home},
+  },
+  {
+    // default options for all screens - can be overridden
+    navigationOptions: {
+      headerTintColor: 'blue',
+      headerStyle: {
+        // this prevents the Navigation Bar from going behind the Status Bar
+        marginTop: StatusBar.currentHeight,
+      },
+    },
+  },
+);
+
 function DelayPromise(delay) {
   //return a function that accepts a single variable
   return function (data) {
@@ -58,24 +78,9 @@ export default class App extends React.Component {
           onBeforeLift={DelayPromise(10000)}
           persistor={persistor}
         >
-          <View style={styles.container}>
-            <StatusBar
-              backgroundColor="red"
-              barStyle="light-content"
-              hidden={false}
-            />
-            <Home/>
-          </View>
+          <RootNavigator/>
         </PersistGate>
       </Provider>
     );
   }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+};
