@@ -2,25 +2,40 @@ import React from 'react';
 import {AsyncStorage, StatusBar, StyleSheet, View} from 'react-native';
 import Home from "./app/components/Home";
 import {applyMiddleware, compose, createStore} from "redux";
-import {INITIAL_STATE, reducer} from "./app/redux/DataStore";
+import {reducer} from "./app/redux/DataStore";
 import thunk from "redux-thunk";
 import {logger} from "redux-logger";
-import {autoRehydrate, persistStore} from "redux-persist";
 import {Provider} from "react-redux";
+import {persistCombineReducers, persistStore} from "redux-persist";
+
+const config = {
+  key: 'primary',
+  storage: AsyncStorage
+}
 
 const store = createStore(
-  reducer,
-  INITIAL_STATE,  // possibly use undefined here instead
+  persistCombineReducers(
+    config,
+    {rootReducer: reducer},
+  ),
+  undefined,
   compose(
     applyMiddleware(
       thunk,
       logger
     ),
-    autoRehydrate()
   )
 );
 
-persistStore(store, {storage: AsyncStorage});
+persistStore(
+  store,
+  null,
+  () => {
+    console.log("----------------------------");
+    console.log(store.getState());
+    console.log("----------------------------");
+  }
+);
 
 
 export default class App extends React.Component {

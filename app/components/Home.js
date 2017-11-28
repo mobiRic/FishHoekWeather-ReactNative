@@ -14,8 +14,8 @@ import {bindActionCreators} from "redux";
 
 @connect(
   state => ({
-    selectedPage: state.selectedPage,
-    rehydrated: state.rehydrated,
+    selectedPage: state.rootReducer.selectedPage,
+    rehydrated: state.rootReducer.rehydrated,
   }),
   dispatch => ({
     actions: {
