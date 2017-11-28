@@ -1,5 +1,5 @@
 import React from 'react';
-import {AsyncStorage, StatusBar, StyleSheet, View} from 'react-native';
+import {AsyncStorage, StatusBar, StyleSheet, Text, View} from 'react-native';
 import Home from "./app/components/Home";
 import {applyMiddleware, compose, createStore} from "redux";
 import {reducer} from "./app/redux/DataStore";
@@ -7,11 +7,12 @@ import thunk from "redux-thunk";
 import {logger} from "redux-logger";
 import {Provider} from "react-redux";
 import {persistCombineReducers, persistStore} from "redux-persist";
+import {PersistGate} from "redux-persist/es/integration/react";
 
 const config = {
   key: 'primary',
   storage: AsyncStorage
-}
+};
 
 const store = createStore(
   persistCombineReducers(
@@ -27,13 +28,10 @@ const store = createStore(
   )
 );
 
-persistStore(
+const persistor = persistStore(
   store,
   null,
   () => {
-    console.log("----------------------------");
-    console.log(store.getState());
-    console.log("----------------------------");
   }
 );
 
@@ -42,14 +40,19 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <View style={styles.container}>
-          <StatusBar
-            backgroundColor="red"
-            barStyle="light-content"
-            hidden={false}
-          />
-          <Home/>
-        </View>
+        <PersistGate
+          loading={null}
+          persistor={persistor}
+        >
+          <View style={styles.container}>
+            <StatusBar
+              backgroundColor="red"
+              barStyle="light-content"
+              hidden={false}
+            />
+            <Home/>
+          </View>
+        </PersistGate>
       </Provider>
     );
   }

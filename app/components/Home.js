@@ -41,13 +41,10 @@ export default class Home extends Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    // delay initialisation until the props are rehydrated
-    if (!this.props.rehydrated && nextProps.rehydrated) {
-      this.props.actions.fetchWeather();
-      if (nextProps.selectedPage) {
-        this._setPage(nextProps.selectedPage);
-      }
+  componentWillMount() {
+    this.props.actions.fetchWeather();
+    if (this.props.selectedPage) {
+      this._setPage(this.props.selectedPage);
     }
   }
 
