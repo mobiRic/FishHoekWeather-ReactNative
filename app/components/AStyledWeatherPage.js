@@ -51,10 +51,20 @@ export default class AStyledWeatherPage extends Component {
     }
   }
 
+  componentWillMount() {
+    if (this.props.weather) {
+      this._handleWeatherUpdated(this.props.weather);
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.weather) {
-      this._onWeatherUpdated(nextProps.weather);
+      this._handleWeatherUpdated(nextProps.weather);
     }
+  }
+
+  _handleWeatherUpdated(weather) {
+    this._onWeatherUpdated(weather);
   }
 
   _getRefreshControl() {

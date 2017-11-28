@@ -14,8 +14,7 @@ import {bindActionCreators} from "redux";
 
 @connect(
   state => ({
-    selectedPage: state.selectedPage,
-    rehydrated: state.rehydrated,
+    selectedPage: state.rootReducer.selectedPage,
   }),
   dispatch => ({
     actions: {
@@ -41,14 +40,8 @@ export default class Home extends Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    // delay initialisation until the props are rehydrated
-    if (!this.props.rehydrated && nextProps.rehydrated) {
-      this.props.actions.fetchWeather();
-      if (nextProps.selectedPage) {
-        this._setPage(nextProps.selectedPage);
-      }
-    }
+  componentWillMount() {
+    this.props.actions.fetchWeather();
   }
 
   render() {
@@ -107,12 +100,6 @@ export default class Home extends Component {
   _onPageSelected(nativeEvent) {
     let selectedPage = nativeEvent.position;
     this.props.actions.onPageSelected(selectedPage);
-  }
-
-  _setPage(newPage) {
-    if (newPage !== this._viewPager._currentIndex) {
-      this._viewPager.setPage(newPage);
-    }
   }
 
   _renderTabIndicator() {
