@@ -1,6 +1,6 @@
 import React from 'react';
 import {AsyncStorage, StatusBar, StyleSheet, View} from 'react-native';
-import Home from "./app/components/Home";
+import Home from "./app/components/screens/Home";
 import {applyMiddleware, compose, createStore} from "redux";
 import {reducer} from "./app/redux/DataStore";
 import thunk from "redux-thunk";

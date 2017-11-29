@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {RefreshControl} from 'react-native';
-import * as Images from '../Images';
-import {REMOTE_IMAGES} from "../redux/DataStore";
+import * as Images from '../../Images';
+import {REMOTE_IMAGES} from "../../redux/DataStore";
 
 /**
  * Base class for each weather page.

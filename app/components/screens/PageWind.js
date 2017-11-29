@@ -2,9 +2,9 @@ import React from 'react';
 import {Animated, Image, ImageBackground, ScrollView, StyleSheet, Text} from "react-native";
 import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
 import {connect} from "react-redux";
-import {fetchWeather} from "../redux/DataStore";
-import * as Images from "../Images";
-import {DAY_WIND, DAY_WIND_DIR, WEEK_WIND, WEEK_WIND_DIR} from "../Images";
+import {fetchWeather} from "../../redux/DataStore";
+import * as Images from "../../Images";
+import {DAY_WIND, DAY_WIND_DIR, WEEK_WIND, WEEK_WIND_DIR} from "../../Images";
 import {bindActionCreators} from "redux";
 
 const TAG_WIND_KNOTS = " knots";

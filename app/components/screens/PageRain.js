@@ -2,9 +2,9 @@ import React from 'react';
 import {Animated, Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import {connect} from "react-redux";
 import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
-import {fetchWeather} from "../redux/DataStore";
-import * as Images from "../Images";
-import {DAY_RAIN, MONTH_RAIN} from "../Images";
+import {fetchWeather} from "../../redux/DataStore";
+import * as Images from "../../Images";
+import {DAY_RAIN, MONTH_RAIN} from "../../Images";
 import bindActionCreators from "redux/es/bindActionCreators";
 
 /**
