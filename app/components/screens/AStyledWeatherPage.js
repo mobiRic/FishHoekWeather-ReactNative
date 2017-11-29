@@ -66,13 +66,13 @@ export default class AStyledWeatherPage extends Component {
    */
   getImage(imageName) {
     if (!this.props.lastUpdated) {
-      return this._getLocalImage(imageName);
+      return this.getLocalImage(imageName);
     } else {
       return this._getRemoteImage(imageName, this.props.cacheBuster);
     }
   }
 
-  _getLocalImage(imageName) {
+  getLocalImage(imageName) {
     switch (imageName) {
       case Images.DAY_WIND: {
         return Images.LOCAL_DAY_WIND;
@@ -130,6 +130,5 @@ export const SharedWeatherPageStyles = {
   graph: {
     width: 300,
     height: 180,
-    resizeMode: 'contain',
   },
 };

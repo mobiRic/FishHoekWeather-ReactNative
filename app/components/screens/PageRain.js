@@ -6,6 +6,7 @@ import {fetchWeather} from "../../redux/DataStore";
 import * as Images from "../../Images";
 import {DAY_RAIN, MONTH_RAIN} from "../../Images";
 import bindActionCreators from "redux/es/bindActionCreators";
+import ProgressiveImage from "../widgets/ProgressiveImage";
 
 /**
  * Assumed maximum rain rate the meter will show.
@@ -131,13 +132,15 @@ export default class PageRain extends AStyledWeatherPage {
           />
         </View>
         <Text>24 hour rain</Text>
-        <Image
+        <ProgressiveImage
           style={styles.graph}
-          source={this.getImage(DAY_RAIN)}/>
+          source={this.getImage(DAY_RAIN)}
+          placeholder={this.getLocalImage(DAY_RAIN)}/>
         <Text>30 day rain</Text>
-        <Image
+        <ProgressiveImage
           style={styles.graph}
-          source={this.getImage(MONTH_RAIN)}/>
+          source={this.getImage(MONTH_RAIN)}
+          placeholder={this.getLocalImage(MONTH_RAIN)}/>
       </ScrollView>
     );
   }
