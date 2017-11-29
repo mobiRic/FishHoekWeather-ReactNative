@@ -38,6 +38,12 @@ export default class ProgressiveImage extends Component {
         <ImageBackground
           key={this.props.key}
           style={this.props.style}
+          imageStyle={[
+            {
+              resizeMode: 'contain'
+            },
+            this.props.style,
+          ]}
           source={this.props.placeholder}
         >
           <Animated.Image
