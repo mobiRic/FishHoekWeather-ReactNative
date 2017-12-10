@@ -6,7 +6,7 @@ import PageBarometer from "./PageBarometer";
 import PageTemperature from "./PageTemperature";
 import PageRain from "./PageRain";
 import {connect} from "react-redux";
-import {fetchWeather, onPageSelected} from "../redux/DataStore";
+import {fetchWeather, onPageSelected} from "../../redux/DataStore";
 import {bindActionCreators} from "redux";
 
 @connect(
@@ -62,7 +62,7 @@ export default class Home extends Component {
             flex: 1,
             resizeMode: 'cover'
           }}
-          source={require('../../imgs/background/false_bay.png')}
+          source={require('../../../imgs/background/false_bay.png')}
         />
         <IndicatorViewPager
           style={{flex: 1}}
@@ -108,23 +108,23 @@ export default class Home extends Component {
     let tabs = [
       {
         text: 'Wind',
-        iconSource: require('../../imgs/ic_tab_wind.png'),
-        selectedIconSource: require('../../imgs/ic_tab_wind.png')
+        iconSource: require('../../../imgs/ic_tab_wind.png'),
+        selectedIconSource: require('../../../imgs/ic_tab_wind.png')
       },
       {
         text: 'Temp',
-        iconSource: require('../../imgs/ic_tab_temp.png'),
-        selectedIconSource: require('../../imgs/ic_tab_temp.png')
+        iconSource: require('../../../imgs/ic_tab_temp.png'),
+        selectedIconSource: require('../../../imgs/ic_tab_temp.png')
       },
       {
         text: 'Baro',
-        iconSource: require('../../imgs/ic_tab_baro.png'),
-        selectedIconSource: require('../../imgs/ic_tab_baro.png')
+        iconSource: require('../../../imgs/ic_tab_baro.png'),
+        selectedIconSource: require('../../../imgs/ic_tab_baro.png')
       },
       {
         text: 'Rain',
-        iconSource: require('../../imgs/ic_tab_rain.png'),
-        selectedIconSource: require('../../imgs/ic_tab_rain.png')
+        iconSource: require('../../../imgs/ic_tab_rain.png'),
+        selectedIconSource: require('../../../imgs/ic_tab_rain.png')
       }
     ];
     return (

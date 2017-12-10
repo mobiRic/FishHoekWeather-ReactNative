@@ -2,10 +2,11 @@ import React from 'react';
 import {Animated, Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import {connect} from "react-redux";
 import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
-import {fetchWeather} from "../redux/DataStore";
-import * as Images from "../Images";
-import {DAY_TEMP_DEW, WEEK_TEMP_DEW} from "../Images";
+import {fetchWeather} from "../../redux/DataStore";
+import * as Images from "../../Images";
+import {DAY_TEMP_DEW, WEEK_TEMP_DEW} from "../../Images";
 import bindActionCreators from "redux/es/bindActionCreators";
+import ProgressiveImage from "../widgets/ProgressiveImage";
 
 /**
  * Assumed maximum temperature the thermometer will show.
@@ -124,13 +125,15 @@ export default class PageTemperature extends AStyledWeatherPage {
           />
         </View>
         <Text>24 hour temperature</Text>
-        <Image
+        <ProgressiveImage
           style={styles.graph}
-          source={this.getImage(DAY_TEMP_DEW)}/>
+          source={this.getImage(DAY_TEMP_DEW)}
+          placeholder={this.getLocalImage(DAY_TEMP_DEW)}/>
         <Text>7 day temperature</Text>
-        <Image
+        <ProgressiveImage
           style={styles.graph}
-          source={this.getImage(WEEK_TEMP_DEW)}/>
+          source={this.getImage(WEEK_TEMP_DEW)}
+          placeholder={this.getLocalImage(WEEK_TEMP_DEW)}/>
       </ScrollView>
     );
   }

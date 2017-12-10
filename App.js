@@ -1,10 +1,9 @@
 import React from 'react';
 import {AsyncStorage, StatusBar} from 'react-native';
-import Home from "./app/components/Home";
+import Home from "./app/components/screens/Home";
 import {applyMiddleware, compose, createStore} from "redux";
 import {reducer} from "./app/redux/DataStore";
 import thunk from "redux-thunk";
-import {logger} from "redux-logger";
 import {Provider} from "react-redux";
 import {StackNavigator} from 'react-navigation';
 import * as Images from "./app/Images";
@@ -25,7 +24,7 @@ const store = createStore(
   compose(
     applyMiddleware(
       thunk,
-      logger
+      // logger
     ),
   )
 );

@@ -1,11 +1,12 @@
 import React from 'react';
-import {Animated, Image, ImageBackground, ScrollView, StyleSheet, Text} from "react-native";
+import {Animated, ImageBackground, ScrollView, StyleSheet, Text} from "react-native";
 import AStyledWeatherPage, {SharedWeatherPageStyles} from "./AStyledWeatherPage";
 import {connect} from "react-redux";
-import {fetchWeather} from "../redux/DataStore";
-import * as Images from "../Images";
-import {DAY_WIND, DAY_WIND_DIR, WEEK_WIND, WEEK_WIND_DIR} from "../Images";
+import {fetchWeather} from "../../redux/DataStore";
+import * as Images from "../../Images";
+import {DAY_WIND, DAY_WIND_DIR, WEEK_WIND, WEEK_WIND_DIR} from "../../Images";
 import {bindActionCreators} from "redux";
+import ProgressiveImage from "../widgets/ProgressiveImage";
 
 const TAG_WIND_KNOTS = " knots";
 const TAG_WIND_DEGREES = "&#176;";
@@ -130,21 +131,29 @@ export default class PageWind extends AStyledWeatherPage {
           />
         </ImageBackground>
         <Text>24 hour wind speed</Text>
-        <Image
+        <ProgressiveImage
           style={styles.graph}
-          source={this.getImage(DAY_WIND)}/>
+          source={this.getImage(DAY_WIND)}
+          placeholder={this.getLocalImage(DAY_WIND)}
+        />
         <Text>24 hour wind direction</Text>
-        <Image
+        <ProgressiveImage
           style={styles.graph}
-          source={this.getImage(DAY_WIND_DIR)}/>
+          source={this.getImage(DAY_WIND_DIR)}
+          placeholder={this.getLocalImage(DAY_WIND_DIR)}
+        />
         <Text>7 day wind speed</Text>
-        <Image
+        <ProgressiveImage
           style={styles.graph}
-          source={this.getImage(WEEK_WIND)}/>
+          source={this.getImage(WEEK_WIND)}
+          placeholder={this.getLocalImage(WEEK_WIND)}
+        />
         <Text>7 day wind direction</Text>
-        <Image
+        <ProgressiveImage
           style={styles.graph}
-          source={this.getImage(WEEK_WIND_DIR)}/>
+          source={this.getImage(WEEK_WIND_DIR)}
+          placeholder={this.getLocalImage(WEEK_WIND_DIR)}
+        />
       </ScrollView>
     );
   }
