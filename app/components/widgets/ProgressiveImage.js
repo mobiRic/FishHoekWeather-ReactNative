@@ -10,23 +10,60 @@ export default class ProgressiveImage extends Component {
     super(props);
     this.state = {
       opacity: new Animated.Value(0),
+      // placeholder defined in props for this component
+      placeholder: this.props.placeholder,
+      // currently displayed image
+      image: this.props.source,
     };
   }
 
-  // noinspection JSUnusedLocalSymbols
-  _onLoadStart(event) {
+  componentWillReceiveProps(nextProps) {
+    // check for new image
+    if (nextProps.source) {
+      if (this.state.image.uri !== nextProps.source.uri) {
+        // queue new image to be displayed
+        this.setState({
+          image: nextProps.source,
+        });
+      }
+    }
+  }
+
+// noinspection JSUnusedLocalSymbols
+  _onLoadStart(event, source) {
     this.state.opacity.setValue(0);
   }
 
   // noinspection JSUnusedLocalSymbols
-  _onLoad(event) {
+  _onLoad(event, source) {
+    // start crossfade
     Animated.timing(
       this.state.opacity,
       {
         toValue: 1,
         duration: this.ANIMATION_DURATION,
-      }).start();
+      }).start(() => this._onCrossfadeComplete(source));
   }
+
+  // noinspection JSUnusedGlobalSymbols
+  _onLoadError(event, source) {
+    this._onDisplayComplete(source);
+  }
+
+  // noinspection JSUnusedGlobalSymbols
+  _onCrossfadeComplete(source) {
+    // load current image into the background placeholder view
+    this.setState({
+      placeholder: source,
+    });
+
+    this._onDisplayComplete(source);
+  }
+
+  // noinspection JSUnusedGlobalSymbols
+  _onDisplayComplete(source) {
+  }
+
 
   render() {
     return (
@@ -44,7 +81,7 @@ export default class ProgressiveImage extends Component {
             },
             this.props.style,
           ]}
-          source={this.props.placeholder}
+          source={this.state.placeholder}
         >
           <Animated.Image
             resizeMode={'contain'}
@@ -55,9 +92,9 @@ export default class ProgressiveImage extends Component {
               },
               this.props.style,
             ]}
-            source={this.props.source}
-            onLoadStart={(event) => this._onLoadStart(event)}
-            onLoad={(event) => this._onLoad(event)}
+            source={this.state.image}
+            onLoadStart={(event) => this._onLoadStart(event, this.state.image)}
+            onLoad={(event) => this._onLoad(event, this.state.image)}
           />
         </ImageBackground>
       </View>

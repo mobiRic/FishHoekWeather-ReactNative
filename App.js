@@ -24,7 +24,7 @@ const store = createStore(
   compose(
     applyMiddleware(
       thunk,
-      logger
+      // logger
     ),
   )
 );
